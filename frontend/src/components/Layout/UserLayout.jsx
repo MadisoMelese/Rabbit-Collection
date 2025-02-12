@@ -1,6 +1,6 @@
+import { Outlet } from "react-router-dom";
 import Footer from "../Common/Footer";
 import Header from "../Common/Header";
-import Main from "../Common/Main";
 
 const UserLayout = () => {
   return (
@@ -8,9 +8,9 @@ const UserLayout = () => {
       {/* Header */}
       <Header />
       {/* Main */}
-      <Main>
-      <Main />
-      </Main>
+      <main>
+        <Outlet />
+      </main>
       {/* Footer */}
       <Footer />
     </>
