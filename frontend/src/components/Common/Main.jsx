@@ -1,8 +1,9 @@
+import Home from "../../pages/Home"
 
 const Main = () => {
   return (
     <div>
-      Main
+      <Home />
     </div>
   )
 }

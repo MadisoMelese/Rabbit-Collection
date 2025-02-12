@@ -18,16 +18,16 @@ const Footer = () => {
             Sign up and get 10% of your first order.
           </p>
           {/* Newsletter form */}
-          <form className="flex">
+          <form className="md:flex">
             <input
               placeholder="Enter your email"
               type="email"
-              className="p-3 w-full text-sm border-t border-l border-b border-gray-300 rounded-l-md focus:outline-none focus:ring-gray-500 transtion-all"
+              className="p-3 w-full text-sm border border-gray-300 rounded-md md:rounded-r-none focus:outline-none focus:ring-gray-500 transtion-all"
               required
             />
             <button
               type="submit"
-              className="bg-black text-white px-6 py-3 text-sm rounded-r-md hover:bg-gray-800 transition-all"
+              className="bg-black text-white p-3 text-sm rounded-r-md hover:bg-gray-800 transition-all md:w-auto md:m-0 mt-5 w-full"
             >
               Subscribe
             </button>
@@ -133,7 +133,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
-        <p className="text-gray-500 text-sm tracking-tighter text-center">© 2025, MadishaLab. All  Rights Reserved.</p>
+        <p className="text-gray-500 text-sm tracking-tighter text-center">© 2025, MadishaCodeLab. All  Rights Reserved.</p>
       </div>
     </footer>
   );
