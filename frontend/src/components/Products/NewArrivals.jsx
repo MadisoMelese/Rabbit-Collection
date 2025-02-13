@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 const NewArrivals = () => {
   const scrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -188,6 +189,8 @@ const NewArrivals = () => {
           Discover the latest styles straight off the runway, freshly added to
           keep your wardrobe on the cutting edge of fashion
         </p>
+
+        {/* Scroll buttons */}
         <div className="absolute right-0 bottom-[-30px] flex space-x-2 ">
           <button
             onClick={() => scroll("left")}
@@ -236,6 +239,12 @@ const NewArrivals = () => {
               draggable="false"
               className="w-full h-[500px] object-cover rounded-lg"
             />
+            <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
+              <Link className="block">
+                <h4 className="font-medium">{product.name}</h4>
+                <p className="mt-1">${product.price}</p>
+              </Link>
+            </div>
           </div>
         ))}
       </div>
