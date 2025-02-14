@@ -1,4 +1,6 @@
 import Hero from "../components/Layout/Hero"
+import FeaturedCollection from "../components/Products/FeaturedCollection"
+import FeaturedSection from "../components/Products/FeaturedSection"
 import GenderCollectionSection from "../components/Products/GenderCollectionSection"
 import NewArrivals from "../components/Products/NewArrivals"
 import ProductDeatails from "../components/Products/ProductDeatails"
@@ -66,9 +68,12 @@ const Home = () => {
 
       <div className="container mx-auto">
         <h2 className="text-3xl text-center font-bold mb-4">Top Wears for Women</h2>
-
         <ProductGrid products={placeholderProducts}/>
       </div>
+
+      <FeaturedCollection />
+      
+      <FeaturedSection />
     </>
   )
 }
