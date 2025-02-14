@@ -20,6 +20,7 @@ export default [
     settings: { react: { version: '18.3' } },
     plugins: {
       react,
+      "extends": ["eslint:all", "plugin:react/all"],
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
@@ -29,6 +30,7 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
+      'react/prop-types':'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
