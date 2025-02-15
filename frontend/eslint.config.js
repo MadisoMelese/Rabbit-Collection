@@ -20,7 +20,7 @@ export default [
     settings: { react: { version: '18.3' } },
     plugins: {
       react,
-      "extends": ["eslint:all", "plugin:react/all"],
+      "extends": ["eslint:recommended", "plugin:react/recommended"],
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },

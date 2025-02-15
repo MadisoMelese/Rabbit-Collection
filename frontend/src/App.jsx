@@ -5,6 +5,8 @@ import {Toaster} from 'sonner'
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
+import CollectionPage from "./pages/CollectionPage";
+import ProductDetails from "./components/Products/ProductDeatails";
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<SignUp />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="collection/:collection" element={<CollectionPage />} />
+          <Route path="product/:id" element={<ProductDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

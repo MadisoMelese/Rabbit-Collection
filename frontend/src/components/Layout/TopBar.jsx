@@ -2,7 +2,7 @@ import { TbBrandMeta } from "react-icons/tb";
 import { IoLogoInstagram, IoLogoLinkedin, IoLogoTwitter } from "react-icons/io";
 const TopBar = () => {
   return (
-    <div className="bg-[#ea2e0e] text-white">
+    <div className="bg-[#ea2e0e] top-0  text-white">
       <div className="container mx-auto flex items-center sm:justify-between justify-center py-3 px-5">
         {/* Social Media Icons */}
         <div className="hidden items-center space-x-4 md:flex">
