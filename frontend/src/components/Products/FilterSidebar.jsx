@@ -3,9 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterSidebar = () => {
   const [searParams, setSearchParams] = useSearchParams();
-
   const navigate = useNavigate()
-  
   const [filters, setFiters] = useState({
     category: "",
     gender: "",
@@ -116,6 +114,7 @@ const FilterSidebar = () => {
                 type="radio"
                 name="category"
                 value={category}
+                checked={filters.category===category}
                 onChange={handleFilterChange}
                 className="hidden peer"
               />
@@ -134,6 +133,8 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={gender}
+                checked={filters.gender===gender}
+
                 onChange={handleFilterChange}
                 type="radio"
                 name="gender"
@@ -152,11 +153,11 @@ const FilterSidebar = () => {
         <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
-              value={color}
+              value={color}           
               onClick={handleFilterChange}
               name="color"
               key={color}
-              className="w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105"
+              className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105 ${filters.color===color? 'ring-2 ring-blue-500':''}`}
               title={color}
               style={{ backgroundColor: color.toLowerCase() }}
             ></button>
@@ -172,6 +173,7 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={size}
+                checked={filters.size.includes(size)}
                 onChange={handleFilterChange}
                 name="size"
                 type="checkbox"
@@ -192,6 +194,7 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={material}
+                checked={filters.material.includes(material)}
                 onChange={handleFilterChange}
                 name="material"
                 type="checkbox"
@@ -212,6 +215,7 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={brand}
+                checked={filters.brand===brand}
                 onChange={handleFilterChange}
                 name="brand"
                 type="checkbox"
@@ -232,7 +236,9 @@ const FilterSidebar = () => {
         <input
           value={priceRange}
           onChange={handleFilterChange}
+          checked={filters.priceRange===priceRange}
           type="range"
+          // checked={filters.priceRange===priceRange}
           name="priceRange"
           min={0}
           max={100}
