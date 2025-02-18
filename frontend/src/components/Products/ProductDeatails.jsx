@@ -89,7 +89,7 @@ const ProductDetails = () => {
     if (selectedProduct?.images?.length > 0) {
       setMainImage(selectedProduct.images[0].url);
     }
-  }, [selectedProduct]);
+  }, []);
 
   return (
     <div className="p-6">
