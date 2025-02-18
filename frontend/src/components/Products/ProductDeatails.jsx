@@ -23,34 +23,32 @@ const selectedProduct = {
   ],
 };
 // you may also like product
-const similarProducts=[
+const similarProducts = [
   {
-    _id:1,
-    name:`Product 1`,
-    price:120,
-    images:[{url:'https://picsum.photos/500/500?random=1'}]
+    _id: 1,
+    name: `Product 1`,
+    price: 120,
+    images: [{ url: "https://picsum.photos/500/500?random=1" }],
   },
   {
-    _id:2,
-    name:`Product 2`,
-    price:220,
-    images:[{url:'https://picsum.photos/500/500?random=2'}]
+    _id: 2,
+    name: `Product 2`,
+    price: 220,
+    images: [{ url: "https://picsum.photos/500/500?random=2" }],
   },
   {
-    _id:3,
-    name:`Product 3`,
-    price:320,
-    images:[{url:'https://picsum.photos/500/500?random=3'}]
+    _id: 3,
+    name: `Product 3`,
+    price: 320,
+    images: [{ url: "https://picsum.photos/500/500?random=3" }],
   },
   {
-    _id:4,
-    name:`Product 4`,
-    price:420,
-    images:[{url:'https://picsum.photos/500/500?random=4'}]
+    _id: 4,
+    name: `Product 4`,
+    price: 420,
+    images: [{ url: "https://picsum.photos/500/500?random=4" }],
   },
-
-]
-
+];
 
 const ProductDetails = () => {
   const [mainImage, setMainImage] = useState(null);
@@ -251,10 +249,8 @@ const ProductDetails = () => {
           <h2 className="text-2xl text-center font-medium mb-4 capitalize">
             you may Also Like
           </h2>
-          <ProductGrid products={similarProducts}/>
+          <ProductGrid products={similarProducts} />
         </div>
-
-
       </div>
     </div>
   );

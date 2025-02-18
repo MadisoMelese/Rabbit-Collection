@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import login from '../assets/login.webp'
+import login from "../assets/login.webp";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,18 +36,26 @@ const Login = () => {
               className="w-full p-2 border  rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500"
             />
           </div>
-          <button className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition">sign In</button>
-          <p className="mt-6 text-center text-sm">Don&apos;t have an account? <Link to='/register' className="text-blue-500 hover:underline">Sign Up</Link></p>
-          
+          <button className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition">
+            sign In
+          </button>
+          <p className="mt-6 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link to="/register" className="text-blue-500 hover:underline">
+              Sign Up
+            </Link>
+          </p>
         </form>
       </div>
 
       <div className="hidden md:block w-1/2 bg-gray-800">
-      <div className="w-full flex flex-col justify-center items-center">
-        <img src={login} alt="Login image"
-        className="h-[750px] w-full object-cover" 
-        />
-      </div>
+        <div className="w-full flex flex-col justify-center items-center">
+          <img
+            src={login}
+            alt="Login image"
+            className="h-[750px] w-full object-cover"
+          />
+        </div>
       </div>
     </div>
   );

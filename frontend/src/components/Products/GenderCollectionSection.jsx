@@ -5,7 +5,6 @@ const GenderCollectionSection = () => {
   return (
     <section className="py-16 px-4 lg:px-0">
       <div className="container mx-auto flex flex-col md:flex-row gap-8">
-
         {/* Women's Collection */}
         <div className="relative flex-1">
           <img
@@ -26,7 +25,6 @@ const GenderCollectionSection = () => {
           </div>
         </div>
 
-
         {/* Men's Collection */}
         <div className="relative flex-1">
           <img
@@ -46,7 +44,6 @@ const GenderCollectionSection = () => {
             </Link>
           </div>
         </div>
-
       </div>
     </section>
   );

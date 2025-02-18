@@ -92,48 +92,50 @@ const Footer = () => {
         <div>
           <h3 className="text-lg text-gray-800 mb-4">Follow Us</h3>
           <div className="flex items-center space-x-4 mb-6">
-            <a 
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer" 
-            className="hover:text-gray-500"
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-500"
             >
-              <TbBrandMeta className="size-5"/>
+              <TbBrandMeta className="size-5" />
             </a>
-            <a 
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer" 
-            className="hover:text-gray-500"
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-500"
             >
-              <RiTwitterXLine className="size-5"/>
+              <RiTwitterXLine className="size-5" />
             </a>
-            <a 
-            href="https://Instagram.com"
-            target="_blank"
-            rel="noopener noreferrer" 
-            className="hover:text-gray-500"
+            <a
+              href="https://Instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-500"
             >
-              <IoLogoInstagram className="size-5"/>
+              <IoLogoInstagram className="size-5" />
             </a>
-            <a 
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer" 
-            className="hover:text-gray-500"
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-500"
             >
-              <IoLogoLinkedin className="size-5"/>
+              <IoLogoLinkedin className="size-5" />
             </a>
           </div>
           <p className="text-gray-500">Call Us</p>
           <p>
-            <FiPhoneCall className="inline-block mr-2"/>
+            <FiPhoneCall className="inline-block mr-2" />
             <a href="tel:+251954233154">+251954233154</a>
           </p>
         </div>
       </div>
       <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
-        <p className="text-gray-500 text-sm tracking-tighter text-center">© 2025, MadishaCodeLab. All  Rights Reserved.</p>
+        <p className="text-gray-500 text-sm tracking-tighter text-center">
+          © 2025, MadishaCodeLab. All Rights Reserved.
+        </p>
       </div>
     </footer>
   );

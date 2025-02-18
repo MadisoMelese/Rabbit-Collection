@@ -2,7 +2,6 @@
 import { IoMdClose } from "react-icons/io";
 import CartContents from "../Cart/CartContents";
 
-// eslint-disable-next-line react/prop-types
 const CartDrawer = ({ toggleDrawer, drawerOpen }) => {
   return (
     <div

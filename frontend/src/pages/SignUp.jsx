@@ -7,17 +7,18 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-    console.log("user info: ", {fullname, email, password})
-  }
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("user info: ", { fullname, email, password });
+  };
+
   return (
     <div className="flex">
       <div className="w-full flex md:w-1/2 flex-col justify-center items-center p-8 md:p-12">
         <form
-        onSubmit={handleSubmit}
-         className="w-full max-w-md bg-white p-8 rounded-lg border border-gray-500 shadow-sm">
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-white p-8 rounded-lg border border-gray-500 shadow-sm"
+        >
           <div className="flex justify-center mb-6">
             <h2 className="text-xl font-medium">Rabbit</h2>
           </div>
@@ -59,8 +60,9 @@ const SignUp = () => {
             />
           </div>
           <button
-          type="submit"
-           className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition capitalize">
+            type="submit"
+            className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition capitalize"
+          >
             sign In
           </button>
           <p className="mt-6 text-center text-sm">

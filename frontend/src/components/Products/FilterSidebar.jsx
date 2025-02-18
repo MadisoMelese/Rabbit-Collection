@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterSidebar = () => {
   const [searParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [filters, setFiters] = useState({
     category: "",
     gender: "",
@@ -69,36 +69,35 @@ const FilterSidebar = () => {
   // select filters functionality
   const handleFilterChange = (e) => {
     const { name, value, checked, type } = e.target;
-    
-    let newFilters = {...filters}
+
+    let newFilters = { ...filters };
     if (type === "checkbox") {
-      if(checked){
-        newFilters[name] = [...(newFilters[name] || []), value]
-      }else{
-        newFilters[name]= newFilters[name].filter((item)=> item !== value)
+      if (checked) {
+        newFilters[name] = [...(newFilters[name] || []), value];
+      } else {
+        newFilters[name] = newFilters[name].filter((item) => item !== value);
       }
     } else {
-      newFilters[name] = value
+      newFilters[name] = value;
     }
 
-    setFiters(newFilters)
-    updateURLParams(newFilters)
+    setFiters(newFilters);
+    updateURLParams(newFilters);
   };
-// product apper in the search bar
-  const updateURLParams = (newFilters)=>{
+  // product apper in the search bar
+  const updateURLParams = (newFilters) => {
     const params = new URLSearchParams();
-    Object.keys(newFilters).forEach((key)=>{
-      if(Array.isArray(newFilters[key]) && newFilters[key].length>0){
-        params.append(key, newFilters[key].join(','))
+    Object.keys(newFilters).forEach((key) => {
+      if (Array.isArray(newFilters[key]) && newFilters[key].length > 0) {
+        params.append(key, newFilters[key].join(","));
+      } else if (newFilters[key]) {
+        params.append(key, newFilters[key]);
       }
-      else if(newFilters[key]){
-        params.append(key, newFilters[key])
-      }
-    })
+    });
 
-    setSearchParams(params)
-    navigate(`?${params.toString()}`)
-  }
+    setSearchParams(params);
+    navigate(`?${params.toString()}`);
+  };
 
   return (
     <div className="p-4">
@@ -114,7 +113,7 @@ const FilterSidebar = () => {
                 type="radio"
                 name="category"
                 value={category}
-                checked={filters.category===category}
+                checked={filters.category === category}
                 onChange={handleFilterChange}
                 className="hidden peer"
               />
@@ -133,8 +132,7 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={gender}
-                checked={filters.gender===gender}
-
+                checked={filters.gender === gender}
                 onChange={handleFilterChange}
                 type="radio"
                 name="gender"
@@ -153,11 +151,13 @@ const FilterSidebar = () => {
         <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
-              value={color}           
+              value={color}
               onClick={handleFilterChange}
               name="color"
               key={color}
-              className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105 ${filters.color===color? 'ring-2 ring-blue-500':''}`}
+              className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105 ${
+                filters.color === color ? "ring-2 ring-blue-500" : ""
+              }`}
               title={color}
               style={{ backgroundColor: color.toLowerCase() }}
             ></button>
@@ -216,7 +216,6 @@ const FilterSidebar = () => {
               <input
                 value={brand}
                 checked={filters.brand.includes(brand)}
-
                 onChange={handleFilterChange}
                 name="brand"
                 type="checkbox"
@@ -237,8 +236,7 @@ const FilterSidebar = () => {
         <input
           value={priceRange}
           onChange={handleFilterChange}
-          checked={filters.priceRange===priceRange}
-          
+          checked={filters.priceRange === priceRange}
           type="range"
           name="priceRange"
           min={0}
