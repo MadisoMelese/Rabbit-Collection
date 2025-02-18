@@ -161,8 +161,8 @@ const ProductDetails = () => {
                     onClick={() => setSelectedColor(color)}
                     className={`size-8 rounded-full border ${
                       color === selectedColor
-                        ? "border-2 border-black"
-                        : "border-gray-600"
+                        ? "ring-2 ring-blue-500"
+                        : "border-none"
                     }`}
                     style={{
                       backgroundColor: color.toLowerCase(),
