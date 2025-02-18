@@ -10,7 +10,7 @@ const FeaturedCollection = () => {
             Comfort and Style
           </h2>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Apparel made for yoyr everyday life
+            Apparel made for your everyday life
           </h2>
           <p className="text-lg text-gray-600 mb-6">
             Discover high-quality, comfortable clothing that effortlessly blends

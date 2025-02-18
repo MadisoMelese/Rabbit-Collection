@@ -215,7 +215,8 @@ const FilterSidebar = () => {
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 value={brand}
-                checked={filters.brand===brand}
+                checked={filters.brand.includes(brand)}
+
                 onChange={handleFilterChange}
                 name="brand"
                 type="checkbox"
@@ -237,8 +238,8 @@ const FilterSidebar = () => {
           value={priceRange}
           onChange={handleFilterChange}
           checked={filters.priceRange===priceRange}
+          
           type="range"
-          // checked={filters.priceRange===priceRange}
           name="priceRange"
           min={0}
           max={100}
