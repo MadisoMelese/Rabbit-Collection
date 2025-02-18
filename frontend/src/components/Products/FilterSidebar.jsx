@@ -233,21 +233,23 @@ const FilterSidebar = () => {
         <label className="block text-gray-900 mb-2 font-medium">
           Price Range
         </label>
-        <input
-          value={priceRange}
-          onChange={handleFilterChange}
-          checked={filters.priceRange === priceRange}
-          type="range"
-          name="priceRange"
-          min={0}
-          max={100}
-          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="range"
+            name="maxPrice"
+            min={0}
+            max={100}
+            value={priceRange[1]}
+            onChange={(e) => handleFilterChange(e, "max")}
+            className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          />
+        </div>
         <div className="flex justify-between text-gray-600 mt-2">
           <span>${priceRange[0]}</span>
           <span>${priceRange[1]}</span>
         </div>
       </div>
+      
     </div>
   );
 };
