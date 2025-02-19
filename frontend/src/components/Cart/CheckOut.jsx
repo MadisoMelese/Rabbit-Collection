@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PaypalButton from "./PaypalButton";
 
 const cart = {
-  product: [
+  products: [
     {
       name: "Stylish Jacket",
       size: "M",
@@ -36,19 +36,20 @@ const CheckOut = () => {
     country: "",
     phone: "",
   });
-const [checkoutId, setCheckoutId] = useState(null)
-
+  const [checkoutId, setCheckoutId] = useState(null);
 
   const handlecreateCheckout = (e) => {
     e.preventDefault();
     console.log("checkout created");
     console.log(shippingAddress);
-    console.log(checkoutId)
-  }
+    console.log(checkoutId);
+    setCheckoutId(1345678);
+  };
 
-  const handleSuccessPayment = (details)=>{
+  const handleSuccessPayment = (details) => {
     console.log("payment success", details);
-  }
+    navigate("/order/success");
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
@@ -189,30 +190,69 @@ const [checkoutId, setCheckoutId] = useState(null)
             />
           </div>
 
-{/* Payment method */}
+          {/* Payment method */}
           <div className="mt-6">
-      {!checkoutId?(
-        <button 
-        type="submit"
-        className="w-full bg-black text-white py-3 rounded">
-          Countinue to Payment
-        </button>
-      ):(
-      <div>
-        <h3 className="text-lg mb-4">Pay with Paypal</h3>
-        <PaypalButton
-        amount={cart.totalPrice}
-        onSuccess={handleSuccessPayment}
-        onError={(err)=>alert("payment failed")}
-        />
-      </div>
-      )}
-    </div>
+            {!checkoutId ? (
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-3 rounded"
+              >
+                Countinue to Payment
+              </button>
+            ) : (
+              <div>
+                <h3 className="text-lg mb-4">Pay with Paypal</h3>
+                <PaypalButton
+                  amount={100}
+                  onSuccess={handleSuccessPayment}
+                  onError={(err) => alert("payment failed")}
+                />
+              </div>
+            )}
+          </div>
         </form>
       </div>
-      
-      {/* Right section */}
 
+      {/* Right section */}
+      <div className="bg-gray-50 p-6 raunded-lg">
+        <h3 className="text-lg mb-4">Order Summary</h3>
+        <div className="border-t py-4 mb-4">
+          {cart.products.map((product, index) => (
+            <div
+              key={index}
+              className="flex items-start justify-between py-2 border-b"
+            >
+              <div className="flex items-start">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-20 h-24 object-cover mr-4"
+                /> 
+                <div>
+                  <h3 className="text-md">{product.name}</h3>
+                  <p className="text-gray-500">Size: {product.size}</p>
+                  <p className="text-gray-500">Color: {product.color}</p>
+                </div>
+              </div>
+              <p className="text-xl">Price: ${product?.price?.toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+
+          <div className="flex justify-between items-center text-lg mb-4">
+            <p>Subtotal</p>
+            <p>${cart.totalPrice?.toLocaleString()}</p>
+          </div>
+          <div className="flex justify-between items-center text-lg mb-4">
+            <p>Shipping</p>
+            <p>Free</p>
+          </div>
+          <div className="flex justify-between items-center text-center text-lg mt-4 border-t">
+            <p className="mt-4">Total</p>
+            <p>${cart.totalPrice?.toLocaleString()}</p>
+          </div>
+
+      </div>
     </div>
   );
 };
