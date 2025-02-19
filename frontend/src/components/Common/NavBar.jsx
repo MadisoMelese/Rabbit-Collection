@@ -59,7 +59,7 @@ const NavBar = () => {
         {/* Right-Naviagtion Links */}
 
         <div className="flex items-center space-x-4">
-          <Link className="hover:text-black">
+          <Link className="hover:text-black" to={"/profile"}>
             <HiOutlineUser className="size-6 text-gray-700" />
           </Link>
 
