@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 const CartDrawer = ({ toggleDrawer, drawerOpen }) => {
   const navigate = useNavigate();
   const handleCheckout = () => {
-    toggleDrawer()
+    toggleDrawer();
     navigate("/checkout");
   };
-  
+
   return (
     <div
       className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col z-50 ${
@@ -30,8 +30,9 @@ const CartDrawer = ({ toggleDrawer, drawerOpen }) => {
       </div>
       <div className="p-4 bg-white sticky bottom-0">
         <button
-        onClick={handleCheckout}
-         className="w-full bg-black text-white py-3 font-semibold rounded-lg hover:bg-gray-800 transtion">
+          onClick={handleCheckout}
+          className="w-full bg-black text-white py-3 font-semibold rounded-lg hover:bg-gray-800 transtion"
+        >
           Checkout
         </button>
         <p className="text-sm tracking-tighter text-gray-600 mt-2 text-center">

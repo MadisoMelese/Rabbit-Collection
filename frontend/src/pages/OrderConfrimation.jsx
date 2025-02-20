@@ -1,3 +1,4 @@
+import QRCodeGenerator from "./QrCodeGenerator";
 
 const checkout = {
   _id:"1234",
@@ -49,7 +50,7 @@ const OrderConfrimation = () => {
 
       {checkout&& (
         <div className="p-6 rounded-lg border border-gray-300">
-          <div className="flex justify-between mb-20">
+          <div className="flex flex-wrap justify-between mb-20">
             {/* order id and date */}
             <div>
               <h2 className="text-xl font-semibold">
@@ -68,7 +69,7 @@ const OrderConfrimation = () => {
           </div>
 
           {/* order items */}
-          <div className="flex justify-between mb-20">
+          <div className="flex flex-wrap justify-between mb-20">
             <div className="flex">
               <img src={checkout.checkoutItems[0].image} alt={checkout.checkoutItems[0].name}
               className="w-20 h-20 object-cover rounded-lg mr-4" 
@@ -95,7 +96,7 @@ const OrderConfrimation = () => {
           </div>
 
           {/* payment info */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-wrap justify-between items-center">
           <div>
             <h4 className="text-lg font-semibold mb-2">Payment Method</h4>
             <p className="text-gray-600">Paypal</p>
@@ -108,9 +109,12 @@ const OrderConfrimation = () => {
             <p className="text-gray-600">{checkout.shippingAddress.city}, {checkout.shippingAddress.country}</p>
           </div>
           </div>
- 
+          <QRCodeGenerator />
+
         </div>
+        
       )}
+
     </div>
   )
 }
