@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Table = ({ orders }) => {
   return (
     <table className="min-w-full text-left text-gray-500">
@@ -23,11 +25,17 @@ const Table = ({ orders }) => {
             >
               {/* order image */}
               <td className="py-2 px-2 sm:py-4 sm:px-4">
+                <Link
+                  to={`/product/${order._id}`}
+                  className="flex items-center space-x-4"
+                >
                 <img
                   src={order.orderItems[0].image}
                   alt={order.name}
                   className="size-10 sm:size-12 object-cover rounded-lg"
                 />
+                </Link>
+
               </td>
 
               {/* order id */}
@@ -41,7 +49,7 @@ const Table = ({ orders }) => {
                 {new Date(order.createdAt).toLocaleTimeString()}
               </td>
               {/* product/order name */}
-              <td className="p-2 sm:py-4 sm:px-4">{order.orderItems.length}</td>
+              <td className="p-2 sm:py-4 sm:px-4">{order?.orderItems?.length}</td>
 
               {/* order created date */}
               <td className="p-2 sm:py-4 sm:px-4">
@@ -60,7 +68,7 @@ const Table = ({ orders }) => {
                     order.isPaid ? "bg-teal-500" : "bg-red-500"
                   }`}
                 >
-                  {order.isPaid ? "paid" : "pending"}
+                  {order?.isPaid ? "paid" : "pending"}
                 </span>
               </td>
             </tr>
