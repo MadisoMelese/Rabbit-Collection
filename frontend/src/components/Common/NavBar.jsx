@@ -59,6 +59,12 @@ const NavBar = () => {
         {/* Right-Naviagtion Links */}
 
         <div className="flex items-center space-x-4">
+          {/* admin link */}
+          <Link 
+          to="/admin"
+          className="block bg-black px-2 rounded text-sm text-white">
+          Admin
+          </Link>
           <Link className="hover:text-black" to={"/profile"}>
             <HiOutlineUser className="size-6 text-gray-700" />
           </Link>

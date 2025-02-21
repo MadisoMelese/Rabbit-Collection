@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Table = ({ orders }) => {
+  const navigate = useNavigate();
+  const handleRowClick = (id) => {
+    navigate(`/order/${id}`);
+  };
   return (
     <table className="min-w-full text-left text-gray-500">
       <thead className="bg-gray-300 text-xs uppercase text-gray-700">
@@ -21,21 +25,16 @@ const Table = ({ orders }) => {
           orders.map((order) => (
             <tr
               key={order._id}
+              onClick={() => handleRowClick(order._id)}
               className="border-b hover:border-teal-700 cursor-pointer hover:text-black hover:translate-1"
             >
               {/* order image */}
               <td className="py-2 px-2 sm:py-4 sm:px-4">
-                <Link
-                  to={`/product/${order._id}`}
-                  className="flex items-center space-x-4"
-                >
                 <img
                   src={order.orderItems[0].image}
                   alt={order.name}
                   className="size-10 sm:size-12 object-cover rounded-lg"
                 />
-                </Link>
-
               </td>
 
               {/* order id */}
@@ -49,7 +48,9 @@ const Table = ({ orders }) => {
                 {new Date(order.createdAt).toLocaleTimeString()}
               </td>
               {/* product/order name */}
-              <td className="p-2 sm:py-4 sm:px-4">{order?.orderItems?.length}</td>
+              <td className="p-2 sm:py-4 sm:px-4">
+                {order?.orderItems?.length}
+              </td>
 
               {/* order created date */}
               <td className="p-2 sm:py-4 sm:px-4">

@@ -82,7 +82,7 @@ const OrderDetailpage = () => {
               <p className="text-gray-600">{new Date(orderDetail.createdAt).toLocaleDateString()}</p>
             </div>
 
-            <div className="fle flex-col items-start sm:items-end mt-4 sm:mt-0">
+            <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
               <span className={`${orderDetail.isPaid?"bg-green-100 text-green-700 ":"bg-red-100 text-red-700"} px-3 py-1 rounded-full text-sm font-medium mb-2`}>
                 {orderDetail.isPaid?"Approved":"Pending"}
               </span>
@@ -125,7 +125,6 @@ const OrderDetailpage = () => {
                 {orderDetail.orderItems.map((item) => (
                   <tr key={item.productId} className="border-b border-gray-300 hover:bg-gray-300">
                     <td className="py-2 px-4 flex items-center">
-                     
                       <Link 
                       to={`/product/${item.productId}`}
                       className="text-blue-500 flex hover:underline"
@@ -147,6 +146,9 @@ const OrderDetailpage = () => {
             </table>
             </div>
           </div>
+
+          {/* Back orders Link */}
+          <Link to='/my-orders' className="text-blue-500 hover:underline">Back to My Order page</Link>
         </div>
       )}
     </div>
