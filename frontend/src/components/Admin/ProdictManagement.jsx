@@ -44,7 +44,7 @@ const ProdictManagement = () => {
                 <td className="py-3 px-4">{product.sku}</td>
                 <td className="py-3 px-4">
                   <Link 
-                  to={`/admin/products/${product._id}`}
+                  to={`/admin/products/${product._id}/edit`}
                   className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600">Edit</Link>
                   <button
                   onClick={()=>handleDelete(product._id)}
