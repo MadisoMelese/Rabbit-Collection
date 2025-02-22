@@ -47,17 +47,7 @@ const EditProductPage = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    console.log({
-      name: productData.name,
-      description: productData.description,
-      price: productData.price,
-      countInStock: productData.countInStock,
-      sku: productData.sku,
-      sizes: productData.sizes,
-      colors: productData.colors,
-      image: productData.images,
-
-    })
+   console.log(productData)
   }
 
   return (
