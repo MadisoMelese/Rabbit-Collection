@@ -67,37 +67,53 @@ const signup = async (req, res) => {
   }
 };
 
-// Get User
+// Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const user = await User.find(); // Fetches all users
-    res.status(201).json({
+    const users = await User.find().select("-password"); // Exclude passwords from all users
+    if (!users.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No users found",
+      });
+    }
+    res.status(200).json({
       success: true,
-      user,
+      users,
     });
-    console.log(user);
   } catch (error) {
     console.error("Error fetching users:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
-// Get users by id
+// Get user by ID
 const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findById(id).select("-password"); // Exclude password
+    const user = await User.findById(id).select("-password");
     if (!user) {
-      return res.status(404).json({ 
-        success:false,
-        message: `User with this ${id} ID not found ` 
+      return res.status(404).json({
+        success: false,
+        message: `User with ID ${id} not found`,
       });
-      
     }
-    res.json(user);
+    res.status(200).json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user by id", error });
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
+      });
+    }
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user by ID",
+      error,
+    });
   }
 };
+
 
 // Verify Email Page page
 const verifyEmail = async (req, res) => {
@@ -138,7 +154,6 @@ const verifyEmail = async (req, res) => {
 
 // Login page
 const login = async (req, res) => {
-  // Implement login functionality
   const { email, password } = req.body;
   if (!email || !password) {
     return res
@@ -149,15 +164,17 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res
-        .status(400)
+        .status(401)
         .json({ success: false, message: "The user doesn't exist!" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({
-        success: false,
-        message: "Incorrect Password, pls try again!",
-      });
+      return res
+        .status(401)
+        .json({
+          success: false,
+          message: "Incorrect Password, please try again!",
+        });
     }
 
     generateTokenAndSetCookie(res, user._id);
@@ -165,7 +182,7 @@ const login = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Logged in successfully!",
       user: {
@@ -175,12 +192,13 @@ const login = async (req, res) => {
     });
   } catch (err) {
     console.log("Error in Login", err);
-    res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
   }
 };
+
 
 // Logout page
 const logout = async (req, res) => {
