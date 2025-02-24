@@ -2,15 +2,23 @@ import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
-import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../mailtrap/emails.js";
+import {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+  sendResetSuccessEmail,
+} from "../mailtrap/emails.js";
 
 // Signup page
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   if (!email || !password || !name) {
     return res
-    .status(400)
-    .json({ success: false, message: "Please fil All fields they are required!" });
+      .status(400)
+      .json({
+        success: false,
+        message: "Please fil All fields they are required!",
+      });
   }
   try {
     const userAlreadyExists = await User.findOne({ email });
@@ -36,10 +44,12 @@ const signup = async (req, res) => {
     await user.save();
 
     // json web token (JWT) Generation for every new user
-    const userifo = {user:{
-      id: user._id,
-      role: user.role
-    }}
+    const userifo = {
+      user: {
+        id: user._id,
+        role: user.role,
+      },
+    };
     generateTokenAndSetCookie(res, userifo);
     await sendVerificationEmail(user.email, verificationToken);
 
@@ -52,9 +62,40 @@ const signup = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err.message)
-    res.status(500).json({ success: false, 
-                          message: "Internal server error" });
+    console.log(err.message);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+// Get User
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await User.find(); // Fetches all users
+    res.status(201).json({
+      success: true,
+      user,
+    });
+    console.log(user);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
+// Get users by id
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id).select("-password"); // Exclude password
+    if (!user) {
+      return res.status(404).json({ 
+        success:false,
+        message: `User with this ${id} ID not found ` 
+      });
+      
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user by id", error });
   }
 };
 
@@ -113,12 +154,10 @@ const login = async (req, res) => {
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return  res
-        .status(400)
-        .json({
-          success: false,
-          message: "Incorrect Password, pls try again!",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect Password, pls try again!",
+      });
     }
 
     generateTokenAndSetCookie(res, user._id);
@@ -143,7 +182,6 @@ const login = async (req, res) => {
   }
 };
 
-
 // Logout page
 const logout = async (req, res) => {
   res.clearCookie("token", {
@@ -158,78 +196,104 @@ const logout = async (req, res) => {
 };
 
 // Forgot password!
-const forgotPassword = async (req, res) =>{
-  const {email} = req.body;
-  try{
-    const user = await User.findOne({email})
-    if(!user){
-      return  res.status(400).json({success:false, message: "user not found!, pls make it sure"})
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "user not found!, pls make it sure" });
     }
 
-    const resetToken = crypto.randomBytes(20).toLocaleString("hex")
-    const resetTokenExpiresAt = Date.now() + 60 * 60* 1000; //one hour
+    const resetToken = crypto.randomBytes(20).toLocaleString("hex");
+    const resetTokenExpiresAt = Date.now() + 60 * 60 * 1000; //one hour
 
     user.resetPasswordToken = resetToken; // from models/user.model.js
     user.resetPasswordExpiresAt = resetTokenExpiresAt; // from models/user.model.js
     await user.save();
-    await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`)
+    await sendPasswordResetEmail(
+      user.email,
+      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+    );
 
-    res.status(200).json({success: true, message: "Password reset link sent to your Email"})
-  }catch(err){
-    console.log("Error in forgot password", err)
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Password reset link sent to your Email",
+      });
+  } catch (err) {
+    console.log("Error in forgot password", err);
     res.status(400).json({
-      success: false, 
-      message: err.message
-    })
+      success: false,
+      message: err.message,
+    });
   }
-}
+};
 
 //reset password
-const resetPassword= async (req, res) => {
+const resetPassword = async (req, res) => {
   try {
-    const {token} = req.params;
-    const {password} = req.body;
+    const { token } = req.params;
+    const { password } = req.body;
 
     const user = await User.findOne({
       resetPasswordToken: token,
-      resetPasswordExpiresAt: {$gt: Date.now()},
+      resetPasswordExpiresAt: { $gt: Date.now() },
     });
 
-    if(!user){
-      return res.status(400).json({success: false, message: "Invalid or Expired reset token"})
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or Expired reset token" });
     }
 
     //update password
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-    user.resetPasswordToken= undefined;
+    user.resetPasswordToken = undefined;
     user.resetPasswordExpiresAt = undefined;
 
     await user.save();
-    await sendResetSuccessEmail(user.email)
+    await sendResetSuccessEmail(user.email);
 
-    res.status(200).json({success: true, message: "Password reset successfully!"})
+    res
+      .status(200)
+      .json({ success: true, message: "Password reset successfully!" });
   } catch (err) {
     console.log("Error in resetpassword", err);
-    res.status(400).json({success: false, message:err.message})
+    res.status(400).json({ success: false, message: err.message });
   }
-}
+};
 //check auth
-const checkAuth = async (req, res) =>{ 
+const checkAuth = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
     if (!user) {
       return res.status(400).json({
-        success: false, message: "user not found!"
-      })
+        success: false,
+        message: "user not found!",
+      });
     }
     res.status(200).json({
-      success:true, user
-    })
+      success: true,
+      user,
+    });
   } catch (err) {
-    console.log("Error in checkAuth", err)
-    res.status(400).json({success:false, message: err.message})
+    console.log("Error in checkAuth", err);
+    res.status(400).json({ success: false, message: err.message });
   }
-}
+};
 
-export {forgotPassword, logout, login, verifyEmail, signup, resetPassword, checkAuth}
+export {
+  getUserById,
+  forgotPassword,
+  getAllUsers,
+  logout,
+  login,
+  verifyEmail,
+  signup,
+  resetPassword,
+  checkAuth,
+};
