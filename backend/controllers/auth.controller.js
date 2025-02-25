@@ -67,6 +67,12 @@ const signup = async (req, res) => {
   }
 };
 
+// MONGODB_URL=mongodb+srv://madishamadiso00:hIsiTlHBX1oTylF4@cluster0.zfsx4.mongodb.net/users?retryWrites=true&w=majority&appName=Cluster0
+
+// PORT=9000
+
+
+
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
