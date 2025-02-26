@@ -68,6 +68,7 @@ const UserManagement = () => {
 
           {/* Email */}
           <FormInput
+          autoComplete="username"
             type="email"
             label="Email"
             name="email"
@@ -77,6 +78,7 @@ const UserManagement = () => {
 
           {/* Password */}
           <FormInput
+          autoComplete="current-password"
             type="password"
             label="Password"
             name="password"

@@ -52,7 +52,6 @@ const signup = async (req, res) => {
     };
     generateTokenAndSetCookie(res, userifo);
     await sendVerificationEmail(user.email, verificationToken);
-
     res.status(201).json({
       success: true,
       message: "User created successfully",
