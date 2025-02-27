@@ -5,9 +5,9 @@ import { protectAuth } from '../middleWare/protectAuth.js'
 
 
 router.get("/check-auth", protectAuth, checkAuth)
-router.post('/signup', signup)
-router.get('/getAllUsers', getAllUsers)
-router.get('/getuser/:id', getUserById)
+router.post('/register', signup)
+router.get('/profile',protectAuth, getAllUsers)
+router.get('/profile/:id', protectAuth, getUserById)
 router.post('/login', login)
 router.post('/logout', logout)
 router.post('/verify-email', verifyEmail)
