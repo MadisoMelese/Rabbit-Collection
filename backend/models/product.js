@@ -38,4 +38,73 @@ const productSchema = new mongoose.Schema({
     type:[String],
     required:true
   },
-})
+  colors:{
+    type:[String],
+    required:true
+  },
+  collections:{
+    type:String,
+    required:true
+  },
+  material:{
+    type:String,
+  },
+  gender:{
+    type:String,
+    enum:["Men", "Women", "Unisex"]
+  },
+  gender:[{
+      url:{
+        type:String,
+        required:true,
+      },
+      altText:{
+        type:String,
+      }
+  }],
+  isFeatured:{
+    type:Boolean,
+    default:false
+  },
+  isPublished:{
+    type:Boolean,
+    default:false
+  },
+  rating:{
+    type:Number,
+    default:0,
+  },
+  numReviews:{
+    type:Number,
+    default:0,
+  },
+ 
+  tags:[String ],
+  user:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:true,
+  },
+  metaTilte:{
+    type:String,
+  },
+  metaDescription:{
+    type:String,
+  },
+  metaKeywords:{
+    type:String,
+  },
+  dimensions:{
+    length:Number,
+    width:Number, 
+    height:Number, 
+  },
+  weight:{
+    type:Number,
+  }
+}, 
+{timestamps:true}
+);
+
+const Product = mongoose.model("Product", productSchema)
+export default Product
