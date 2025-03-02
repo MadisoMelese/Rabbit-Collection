@@ -10,5 +10,6 @@ export const generateTokenAndSetCookie = (res, userInfo) =>{
     samesite: 'strict',
     maxAge: 7*24*60*60*1000,
   })
+  console.log("Generated and set token", token);
   return token;
 }
