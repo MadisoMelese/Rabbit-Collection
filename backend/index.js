@@ -24,6 +24,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import  connectDB from "./config/db.js";
+import productroutes from './routes/productRoutes.js';
 import authroutes from './routes/userRoutes.js';
 const app = express();
 app.use(cors({
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authroutes);
+app.use('/api/auth', productroutes);
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, ()=>{

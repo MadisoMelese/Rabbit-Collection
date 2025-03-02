@@ -1,7 +1,9 @@
 import express from "express"
-import Product from '../models/product.js'
-import {protectAuth} from '../middleWare/protectAuth.js'
-
-
 const router = express.Router()
 
+import {createProduct, getAllProduct} from '../controllers/product.controller.js'
+
+router.get('/products', getAllProduct)
+router.post('/createProduct', createProduct)
+
+export default router
