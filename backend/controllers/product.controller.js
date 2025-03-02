@@ -42,7 +42,7 @@ const createProduct = async (req, res) => {
     tags, 
     dimensions, 
     weight,
-    // user: req.user._id, //reference to the admin user who created this product it
+    user: req.user._id, //reference to the admin user who created this product it
   })
     const createdProduct = await product.save()
     res.status(201).json(createdProduct)
