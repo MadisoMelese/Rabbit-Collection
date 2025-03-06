@@ -3,7 +3,6 @@ const router = express.Router();
 import {getUserById, signup, getAllUsers, login, logout, verifyEmail, forgotPassword, resetPassword, checkAuth} from '../controllers/auth.controller.js'
 import { protectAuth } from '../middleWare/protectAuth.js'
 
-
 router.get("/check-auth", protectAuth, checkAuth)
 router.post('/signup', signup)
 router.get('/getAllUsers', getAllUsers)
