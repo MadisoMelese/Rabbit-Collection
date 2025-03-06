@@ -61,3 +61,11 @@ export const protectAuth = async (req, res, next) => {
     res.status(500).json({ success: false, message: 'Server error' })
   }
 }
+
+export const admin = (req, res, next)=>{
+  if (req.user && req.user.role === "admin") {
+    next()
+  } else {
+    res.status(403).json({message: "Not Authorized as an admin"})
+  }
+}
