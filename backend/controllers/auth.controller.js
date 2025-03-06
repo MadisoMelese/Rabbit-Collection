@@ -52,7 +52,6 @@ const signup = async (req, res) => {
     };
     generateTokenAndSetCookie(res, userifo);
     await sendVerificationEmail(user.email, verificationToken);
-
     res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -66,6 +65,12 @@ const signup = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+// MONGODB_URL=mongodb+srv://madishamadiso00:hIsiTlHBX1oTylF4@cluster0.zfsx4.mongodb.net/users?retryWrites=true&w=majority&appName=Cluster0
+
+// PORT=9000
+
+
 
 // Get all users
 const getAllUsers = async (req, res) => {
@@ -86,7 +91,6 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 // Get user by ID
 const getUserById = async (req, res) => {
   const { id } = req.params;
@@ -98,7 +102,10 @@ const getUserById = async (req, res) => {
         message: `User with ID ${id} not found`,
       });
     }
-    res.status(200).json({ success: true, user });
+    res.status(200).json({ 
+      success: true, 
+      user 
+    });
   } catch (error) {
     if (error.name === "CastError") {
       return res.status(400).json({
@@ -113,9 +120,7 @@ const getUserById = async (req, res) => {
     });
   }
 };
-
-
-// Verify Email Page page
+// Verify Email Page 
 const verifyEmail = async (req, res) => {
   const { code } = req.body;
 
@@ -151,7 +156,6 @@ const verifyEmail = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 // Login page
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -223,7 +227,6 @@ const forgotPassword = async (req, res) => {
         .status(400)
         .json({ success: false, message: "user not found!, pls make it sure" });
     }
-
     const resetToken = crypto.randomBytes(20).toLocaleString("hex");
     const resetTokenExpiresAt = Date.now() + 60 * 60 * 1000; //one hour
 
@@ -260,7 +263,7 @@ const resetPassword = async (req, res) => {
       resetPasswordToken: token,
       resetPasswordExpiresAt: { $gt: Date.now() },
     });
-
+    
     if (!user) {
       return res
         .status(400)

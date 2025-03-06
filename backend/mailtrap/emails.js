@@ -12,10 +12,8 @@ const sendVerificationEmail = async(email, verificationToken)=>{
       html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", verificationToken),
       category: "Email verification"
     })
-
     console.log("Email sent successfully", response)
   }catch(err){
-
     throw new Error(err)
   }
 }
