@@ -55,7 +55,7 @@ export const protectAuth = async (req, res, next) => {
     }
 
     req.user = user // 🔥 Attach full user object, not just userId
-    next()
+    next();
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, message: 'Server error' })
