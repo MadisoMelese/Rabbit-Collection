@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 import Product from '../models/product.js'
 const router = express.Router();
 
@@ -14,7 +14,20 @@ const getAllProduct = async (req, res) => {
   }
 }
 
-// Create a new product
+const getProductById = async (req, res) => {
+  const id = req.params.id
+  try {
+    const product = await Product.findById(id)
+    if (!product) {
+      res.status(404).json({success:false, message:`Product with id ${id} not found!`})
+    }
+    res.status(200).json({success:true, Product:product})
+
+  } catch (error) {
+   console.log("Error in finding product by id: ", error) 
+   json.status(500).json({success:false, message:"server error in finding product by id!"})
+  }
+}
 
 const createProduct = async (req, res) => {
   if (!req.user) {
@@ -54,34 +67,45 @@ const createProduct = async (req, res) => {
   }
 }
 
-const updateProduct = async ( req, res)=>{
-  const id = req.params.id
-  const requiredFields = [
-    "name", "description", "price", "discountPrice", "countInStock", "sku",
-    "category", "brand", "sizes", "colors", "collections", "material", "gender",
-    "images", "isFeatured", "isPublished", "rating", "numReviews", "tags",
-    "dimensions", "weight"
-  ];
-  
+const updateProduct = async (req, res) => {
+  const id = req.params.id;
   const productData = req.body;
-  const missingField = requiredFields.some(field => !productData[field]);
-  
-  if (missingField) {
-    return res.status(400).json({ success: false, message: 'Please fill all the fields' });
+
+  // Check if the request body is empty
+  if (Object.keys(productData).length === 0) {
+    return res.status(400).json({ success: false, message: 'No update data provided' });
   }
-  
+
   try {
-    const product = await Product.findByIdAndUpdate(id, productData, {new: true})
+    const product = await Product.findByIdAndUpdate(id, productData, { new: true });
+
     if (!product) {
-      return res.status(404).json({success: false, message: 'Product not found'});
+      return res.status(404).json({ success: false, message: 'Product not found' });
     }
 
-    res.status(200).json({success: true, message:"Product updated successfully", data: product});
+    res.status(200).json({ success: true, message: "Product updated successfully", data: product });
   } catch (error) {
     console.log(error);
-    res.status(500).json({success: false, message: 'Internal Server Error'});
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const product = await Product.findByIdAndDelete(id)
+    if (product) {
+      res.status(200).json({ success: true, message: "Product deleted successfully", data: product });
+    }else{
+      res.status(404).json({success:false, message:`Product with this id ${id} Not found!`})
+    }
+  } catch (error) {
+    console.error("Error in deleting product: ", error)
+    res.status(500).send("Server error in deleting product!")
   }
 }
 
 
-export {createProduct, getAllProduct, updateProduct}
+
+export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById}
