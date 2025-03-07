@@ -53,25 +53,7 @@ const createProduct = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
-// const updateBook = async (req, res) => {
-//   const id = req.params.id;
-//   const {title, author, publishedYear, price} = req.body;
 
-//   if(!title || !author || !publishedYear || !price){
-//     return res.status(400).json({success: false, message: 'Please fill all the fields'});
-//   }
-
-//   try{
-//     const book = await Book.findByIdAndUpdate(id, {title, author, publishedYear, price}, {new: true});
-//     if(!book){
-//       return res.status(404).json({success: false, message: 'Book not found'});
-//     }
-//     res.status(200).json({success: true, data: book});
-//   }catch(error){
-//     console.log(error);
-//     res.status(500).json({success: false, message: 'Internal Server Error'});
-// }
-// }
 const updateProduct = async ( req, res)=>{
   const id = req.params.id
   const requiredFields = [

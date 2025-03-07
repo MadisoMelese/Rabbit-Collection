@@ -6,6 +6,6 @@ import {createProduct, getAllProduct, updateProduct} from '../controllers/produc
 
 router.get('/products', getAllProduct)
 router.post('/createProduct', protectAuth,  admin, createProduct)
-router.post('/products/:id', protectAuth,  admin, updateProduct)
+router.put('/products/:id', protectAuth,  admin, updateProduct)
 
 export default router
