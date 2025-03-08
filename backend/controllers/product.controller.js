@@ -142,6 +142,7 @@ const bestSeller = async (req, res) => {
 }
 const newArrivals = async (req, res) => {
   try {
+    
     const newArrivals = await Product.find().sort({createdAt: -1}).limit(8)
     if(!newArrivals){
       return res.status(404).json({success:false, message:"New Arrivals not found!"})
@@ -214,6 +215,7 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
 // @access: private
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
