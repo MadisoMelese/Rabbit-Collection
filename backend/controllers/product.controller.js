@@ -3,7 +3,7 @@ import Product from '../models/product.js'
 const router = express.Router();
 
 // Get all products
-
+// @access: public
 const getAllProduct = async (req, res) => {
 
   // simple stack
@@ -91,7 +91,7 @@ try {
     res.status(500).json({ message: err.message })
   }
 }
-
+// @access: public
 const getProductById = async (req, res) => {
   const id = req.params.id
   try {
@@ -106,7 +106,7 @@ const getProductById = async (req, res) => {
    json.status(500).json({success:false, message:"server error in finding product by id!"})
   }
 }
-
+// @access: public
 const similarProduct = async (req, res) => {
   const { id } = req.params;
   // console.log(id); //for debugging purpose only
@@ -127,6 +127,7 @@ const similarProduct = async (req, res) => {
   }  
 }
 // @desscription: best seller section fetch using highest rating 
+// @access: public
 const bestSeller = async (req, res) => {
   try {
     const bestSeller = await Product.findOne().sort({rating: -1})
@@ -139,7 +140,20 @@ const bestSeller = async (req, res) => {
     res.status(500).send("Server error in best seller section")
   }
 }
-
+const newArrivals = async (req, res) => {
+  try {
+    const newArrivals = await Product.find().sort({createdAt: -1}).limit(8)
+    if(!newArrivals){
+      return res.status(404).json({success:false, message:"New Arrivals not found!"})
+    }
+    res.status(200).json(newArrivals)
+  } catch (error) {
+    console.error("Error in new arrivals section:", error)
+    res.status(500).send("Server Error in New Arrivals section")
+  }
+}
+// @desc: adding product to the database
+// @access: private
 const createProduct = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ success: false, message: 'User not authenticated' })
@@ -177,7 +191,7 @@ const createProduct = async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 }
-
+// @access: private
 const updateProduct = async (req, res) => {
   const id = req.params.id;
   const productData = req.body;
@@ -200,7 +214,7 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
+// @access: private
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
 
@@ -219,4 +233,4 @@ const deleteProduct = async (req, res) => {
 
 
 
-export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct, bestSeller}
+export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct, bestSeller, newArrivals}
