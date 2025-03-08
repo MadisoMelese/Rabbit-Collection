@@ -107,6 +107,30 @@ const getProductById = async (req, res) => {
   }
 }
 
+const similarProduct = async (req, res) => {
+  const { id } = req.params;
+  // console.log(id); //for debugging purpose only
+  try {
+    const product = await Product.findById(id)
+    if (!product) {
+      return res.status(404).json({success:false, message:`Product with id ${id} not found!`})
+    }
+    const similarProduct = await Product.find({
+      _id: {$ne: id}, //excluding current product id
+      gender:product.gender,
+      category:product.category,
+    }).limit(4)
+    res.status(200).json({success:true, similarProducts:similarProduct})
+  } catch (error) {
+    console.error("Error in fetching similarproduct!", error)
+    res.status(500).send("Server Error in fetching similar products")
+  }  
+}
+// @desscription: best seller section fetch using highest rating 
+// const bestSeller = async (req, res) => {
+//   const produ
+// }
+
 const createProduct = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ success: false, message: 'User not authenticated' })
@@ -186,4 +210,4 @@ const deleteProduct = async (req, res) => {
 
 
 
-export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById}
+export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct}
