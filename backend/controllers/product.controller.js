@@ -127,9 +127,18 @@ const similarProduct = async (req, res) => {
   }  
 }
 // @desscription: best seller section fetch using highest rating 
-// const bestSeller = async (req, res) => {
-//   const produ
-// }
+const bestSeller = async (req, res) => {
+  try {
+    const bestSeller = await Product.findOne().sort({rating: -1})
+    if (!bestSeller) {
+      return res.status(404).json({success:false, message:"No best Seller found!"})
+    }
+    res.json({success:true, bestSeller:bestSeller})
+  } catch (error) {
+    console.log("Error in best seller", error)
+    res.status(500).send("Server error in best seller section")
+  }
+}
 
 const createProduct = async (req, res) => {
   if (!req.user) {
@@ -210,4 +219,4 @@ const deleteProduct = async (req, res) => {
 
 
 
-export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct}
+export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct, bestSeller}
