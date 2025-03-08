@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 import Product  from "./models/product.js";
 import {User}  from "./models/User.js";
 import {products}  from "./data/products.js";
@@ -12,10 +13,12 @@ const seedData = async ()=>{
     await User.deleteMany();
 
     // create default admin user 
+    const hashedPassword = await bcrypt.hash("12345678", 10);
+
     const creatdeUser = await User.create({
       name:"Admin User",
       email:"admin@example.com",
-      password:"12345678",
+      password:hashedPassword,
       role:"admin"
     });
 

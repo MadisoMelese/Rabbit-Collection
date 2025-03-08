@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authroutes);
-app.use('/api/product', productroutes);
+app.use('/api/products', productroutes);
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, ()=>{

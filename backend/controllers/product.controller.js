@@ -5,11 +5,89 @@ const router = express.Router();
 // Get all products
 
 const getAllProduct = async (req, res) => {
-  try {
-    const products = await Product.find()
+
+  // simple stack
+//   try {
+//     const products = await Product.find()
+//     console.log("Products: ", products)
+//     res.json(products)
+//   } catch (err) {
+//     res.status(500).json({ message: err.message })
+//   }
+// 
+
+// in hard way but neccessary
+try {
+  const {collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, limit}= req.query;
+
+  let query = {}
+
+  // filtering logic
+  if (collection && collection.toLocaleLowerCase() !== "all") {
+    query.collections=collection;
+  }
+  if (category && category.toLocaleLowerCase() !== "all") {
+    query.category=category;
+  }
+  if (material) {
+    query.material={$in: material.split(",")};
+  }
+  if (brand) {
+    query.brand={$in:brand.spilt(",")};
+  }
+  if (size) {
+    query.sizes={$in:size.spilt(",")};
+  }
+  if(color){
+    query.colors={$in:[color]}
+  }
+  if(gender){
+    query.gender=gender
+  }
+
+  if(minPrice||maxPrice){
+    query.price={}
+    if(minPrice) query.price.gte= Number(minPrice);
+    if(maxPrice) query.price.lte= Number(maxPrice);
+  }
+  if(search){
+    query.$or=[{
+      name:{
+        $regex:search,
+        $options:"i"
+      },
+      description:{
+        $regex:search,
+        $options:"i"
+      }
+    }]
+  }
+
+  // sorting Logic
+  let sort={}
+  if(sortBy){
+    switch(sortBy){
+      case "priceAsc":
+        sort = {price:1};
+        break;
+      case "priceDesc":
+        sort = {price:-1};
+        break;
+      case "popularity":
+        sort = {rating: -1};
+        break;
+      default:
+        break;
+    }
+  }
+
+  // fetching products and apply sorting and limit
+  let products = await Product.find(query).sort(sort).limit(Number(limit) || 0)
+
     console.log("Products: ", products)
     res.json(products)
   } catch (err) {
+    console.error("Error in fetching products", err)
     res.status(500).json({ message: err.message })
   }
 }
