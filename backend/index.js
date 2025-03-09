@@ -26,6 +26,7 @@ import cors from 'cors';
 import  connectDB from "./config/db.js";
 import productroutes from './routes/productRoutes.js';
 import authroutes from './routes/userRoutes.js';
+import cart from './routes/cartRoutes.js';
 const app = express();
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authroutes);
 app.use('/api/products', productroutes);
+app.use('/api/cart', cart);
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, ()=>{
