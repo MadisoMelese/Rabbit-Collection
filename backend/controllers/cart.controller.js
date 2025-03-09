@@ -10,6 +10,7 @@ const getCart = async (userId, guestId) => {
   return null;
 }
 
+// add order in the cart
 const addToTheCart = async (req, res) => {
   const {productId, quantity, size, color, guestId, userId} = req.body;
 
@@ -68,6 +69,7 @@ const addToTheCart = async (req, res) => {
             quantity,
           },
         ],
+        
         totalPrice:product.price*quantity,
 
       })
@@ -79,4 +81,41 @@ const addToTheCart = async (req, res) => {
   }
 }
 
-export {addToTheCart, }
+// update order w/c added in the cart
+const updateCart = async (req, res) => {
+  const {productId, quantity, size, color, guestId, userId} = req.body;
+
+  try {
+    let cart = await getCart(userId, guestId);
+    if(!cart){
+      return res.status(404).json({success:false, message:"Cart not found!"})
+    }
+
+    const productIndex = cart.products.findIndex((product)=> 
+    product.productId.toString()===productId && 
+    product.size===size &&
+    product.color===color
+    );
+    if(productIndex >-1){
+      // update quantity
+      if (quantity>0) {
+        cart.products[productIndex].quantity=quantity;
+      }else{
+        cart.products.splice(productIndex, 1) // it removes products if quantity is 0
+      }
+
+      // total price
+      cart.totalPrice= cart.products.reduce((acc, item)=>acc + item.price*item.quantity, 0);
+
+      await cart.save();
+      return res.status(200).json(cart)
+    }else{
+      return res.status(404).json({message:"Product not found!"})
+    }
+  } catch (error) {
+    console.error("Server Error in updating cart!", error)
+    return res.status(500).json({success:false, message:"Server Error in updating cart!"})
+  }
+}
+
+export {addToTheCart, updateCart}
