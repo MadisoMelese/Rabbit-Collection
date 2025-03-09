@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import Product  from "./models/product.js";
 import {User}  from "./models/User.js";
+import {Cart}  from "./models/Cart.js";
 import {products}  from "./data/products.js";
+
  
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URL)
@@ -11,6 +13,7 @@ const seedData = async ()=>{
   try {
     await Product.deleteMany();
     await User.deleteMany();
+    await Cart.deleteMany();
 
     // create default admin user 
     const hashedPassword = await bcrypt.hash("12345678", 10);
