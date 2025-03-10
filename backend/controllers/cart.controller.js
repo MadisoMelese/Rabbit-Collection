@@ -192,7 +192,7 @@ const mergecart = async (req, res) => {
         }
         });
 // update total price
-        userCart.totalPrice=userCart.products.reduce((acc, item)= acc+item.quantity+item.price, 0)
+        userCart.totalPrice=userCart.products.reduce((acc, item)=> acc+item.quantity+item.price, 0)
 
         await userCart.save()
         // remove the guest cart after merging

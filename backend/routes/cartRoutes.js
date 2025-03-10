@@ -6,6 +6,6 @@ router.post('/', addToTheCart)
 router.put('/', updateCart)
 router.delete('/', removeFromTheCart)
 router.get('/', getProductsinTheCart)
-router.get('/merge', mergecart)
+router.post('/merge', mergecart)
 
 export default router
