@@ -114,8 +114,36 @@ const updateCart = async (req, res) => {
     }
   } catch (error) {
     console.error("Server Error in updating cart!", error)
-    return res.status(500).json({success:false, message:"Server Error in updating cart!"})
+    res.status(500).json({success:false, message:"Server Error in updating cart!"})
   }
 }
 
-export {addToTheCart, updateCart}
+// remove product from the cart
+const removeFromTheCart = async (req, res) => {
+  const {productId, quantity, size, color, guestId, userId} = req.body;
+  try {
+    let cart = await getCart(userId, guestId);
+    if (!cart) {
+      return res.status(404).json({success: true, message:"cart not found!"})
+    }
+    const productIndex = cart.products.findIndex((product)=> 
+      product.productId.toString()===productId && 
+      product.size===size &&
+      product.color===color
+      );
+      if(productIndex >-1){
+        cart.products.splice(productIndex, 1)
+        cart.totalPrice= cart.products.reduce((acc, item)=>acc+item.price*item.quantity, 0)
+        await cart.save()
+        return res.status(200).json({success:true, cart:cart})
+      }else{
+        return res.status(404).json({success:fale, message:"product not found in the cart"})
+
+      }
+  } catch (error) {
+    console.error("Serner in removing from cart", error)
+    res.status(500).json({success:false, message:"Server Error in removing from cart!"})
+  }
+}
+
+export {addToTheCart, updateCart, removeFromTheCart}
