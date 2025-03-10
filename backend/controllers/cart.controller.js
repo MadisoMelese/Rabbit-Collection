@@ -162,4 +162,64 @@ const getProductsinTheCart = async (req, res) => {
   }
 }
 
-export {addToTheCart, updateCart, removeFromTheCart, getProductsinTheCart}
+// merge guest cart into user login 
+const mergecart = async (req, res) => {
+  const {guestId}=req.body;
+  try {
+    // find the guest cart and user cart!
+    const guestCart = await Cart.findOne({guestId})
+    const userCart = await Cart.findOne({user: req.user._id})
+
+    if (guestCart) {
+      if (guestCart.products.length===0) {
+        return res.status(400).json({message:"Guest Empty"})
+      }
+
+      if (userCart) {
+        // merge guest cart into user cart
+        guestCart.products.forEach((guestItem)=>{
+          const productIndex = userCart.products.findIndex((item)=>
+          item.productId.toString()===guestItem.productId.toString()&&
+          item.size===guestItem.size&&
+          item.color===guestItem.color
+        )
+        if (productIndex>-1) {
+          // if the items exists in the user cart, just update th quantity
+          userCart.products[productIndex].quantity=+guestItem.quantity
+        }else{
+          // otherwise, add the guest item to the cart
+          userCart.products.push(guestItem)
+        }
+        });
+// update total price
+        userCart.totalPrice=userCart.products.reduce((acc, item)= acc+item.quantity+item.price, 0)
+
+        await userCart.save()
+        // remove the guest cart after merging
+        try {
+          await Cart.findOneAndDelete({guestId})
+        } catch (error) {
+          console.error("Error in deleting guest cart!", error)
+        }
+        res.status(200).json({success:true, guestCart:guestCart})
+      } else {
+        // if the user has no existing cart, assign the guest cart to the user
+        guestCart.user = req.user._id;
+        guestCart.guestId=undefined;
+        await guestCart.save();
+
+        res.status(200).json({guestCart})
+      }
+    } else{
+      if(userCart){
+        // guest cart has already merged, return user cart!
+        return res.status(200).json(userCart)
+      }
+      res.status(400).json({message:"Guest cart not fond!"})
+    }
+  } catch (error) {
+    console.error("Server Error in merging guest",error)
+    res.status(500).json({success:false, MediaSession:"Server Error in merging guest"})
+  }
+}
+export {addToTheCart, updateCart, removeFromTheCart, getProductsinTheCart, mergecart}
