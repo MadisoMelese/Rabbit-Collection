@@ -5,5 +5,6 @@ import {addToTheCart, updateCart, removeFromTheCart} from '../controllers/cart.c
 router.post('/', addToTheCart)
 router.put('/', updateCart)
 router.delete('/', removeFromTheCart)
+router.get('/', getProductsinTheCart)
 
 export default router
