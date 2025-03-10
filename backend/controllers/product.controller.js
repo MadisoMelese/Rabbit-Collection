@@ -232,7 +232,7 @@ const deleteProduct = async (req, res) => {
     res.status(500).send("Server error in deleting product!")
   }
 }
-
+// @m
 
 
 export {createProduct, getAllProduct, updateProduct, deleteProduct, getProductById, similarProduct, bestSeller, newArrivals}
