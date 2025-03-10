@@ -169,7 +169,7 @@ const mergecart = async (req, res) => {
     // find the guest cart and user cart!
     const guestCart = await Cart.findOne({guestId})
     const userCart = await Cart.findOne({user: req.user._id})
-
+ 
     if (guestCart) {
       if (guestCart.products.length===0) {
         return res.status(400).json({message:"Guest Empty"})
