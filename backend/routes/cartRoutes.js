@@ -1,6 +1,6 @@
 import express from "express"
 const router = express.Router()
-import {addToTheCart, updateCart, removeFromTheCart} from '../controllers/cart.controller.js'
+import {addToTheCart, updateCart, removeFromTheCart, getProductsinTheCart} from '../controllers/cart.controller.js'
 
 router.post('/', addToTheCart)
 router.put('/', updateCart)
