@@ -146,4 +146,20 @@ const removeFromTheCart = async (req, res) => {
   }
 }
 
-export {addToTheCart, updateCart, removeFromTheCart}
+// get products in the cart
+const getProductsinTheCart = async (req, res) => {
+  const {userId, guestId}=req.query
+  try {
+    const cart = await getCart(userId, guestId)
+    if (cart) {
+      return res.status(200).json({success:true, cart:cart})
+    } else {
+      return res.status(404).json({success:false, message:"cart not found!"}) 
+    }
+  } catch (error) {
+    console.error("Server error in getProductsinTheCart", error)
+    res.status(500).json({success: false, message:"Server error in getProductsinTheCart"})
+  }
+}
+
+export {addToTheCart, updateCart, removeFromTheCart, getProductsinTheCart}
