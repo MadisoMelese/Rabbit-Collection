@@ -168,7 +168,7 @@ const mergecart = async (req, res) => {
   try {
     // Find the guest cart and user cart
     const guestCart = await Cart.findOne({ guestId });
-    const userCart = await Cart.findOne({ user: req.user._id });
+    const userCart = await Cart.findOne({ userInfo: req.userInfo });
 
     if (guestCart) {
       if (!guestCart.products || guestCart.products.length === 0) {
@@ -176,6 +176,8 @@ const mergecart = async (req, res) => {
       }
 
       if (userCart) {
+        if (!userCart.products) userCart.products = [];
+
         // Merge guest cart into user cart
         guestCart.products.forEach((guestItem) => {
           const productIndex = userCart.products.findIndex(
@@ -200,25 +202,28 @@ const mergecart = async (req, res) => {
         await userCart.save();
 
         // Remove the guest cart after merging
-        try {
-          await Cart.findOneAndDelete({ guestId });
-        } catch (error) {
-          console.error("Error in deleting guest cart!", error);
-        }
+        await Cart.findOneAndDelete({ guestId });
 
         return res.status(200).json({ success: true, userCart });
       } else {
         // If the user has no existing cart, assign the guest cart to the user
-        guestCart.user = req.user._id;
-        guestCart.guestId = undefined;
-        await guestCart.save();
+        guestCart.userInfo = req.userInfo;
 
-        return res.status(200).json({ success: true, userCart: guestCart });
+        // Properly remove guestId
+        guestCart.set("guestId", undefined, { strict: false }); 
+        
+        await guestCart.save();
+        
+        // Reload from DB to reflect changes
+        const updatedCart = await Cart.findById(guestCart._id).lean();
+        
+        return res.status(200).json({ success: true, userCarts: updatedCart });
+        
       }
     } else {
       if (userCart) {
         // Guest cart has already merged, return user cart
-        return res.status(200).json(userCart);
+        return res.status(200).json({ success: true, userCart });
       }
       return res.status(400).json({ message: "Guest cart not found!" });
     }
@@ -227,5 +232,6 @@ const mergecart = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error in merging guest" });
   }
 };
+
 
 export {addToTheCart, updateCart, removeFromTheCart, getProductsinTheCart, mergecart}
