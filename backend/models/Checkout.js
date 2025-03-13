@@ -63,5 +63,20 @@ const checkoutSchema = new mongoose.Schema({
   paidAt:{
     type:Date,
   },
-  pa
+  paymentStatus:{
+    type:String,
+    default:"pending"
+  },
+  paymentDetails:{
+    type:mongoose.Schema.Types.Mixed, // store payment-related details like transaction ID, paypal response
+  },
+  isFinalized:{
+    type:Boolean,
+    default:false,
+  },
+  finalizedAt:{
+    type:Date,
+  }
 },{timestamps:true})
+
+export const Checkout = mongoose.model("Checkout", checkoutSchema)
