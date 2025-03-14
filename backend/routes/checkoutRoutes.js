@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/', protectAuth, createCheckout);
 router.put('/:id/pay', protectAuth, updateCheckout);
-router.put('/:id/finalized', protectAuth, updateCheckout);
+router.post('/:id/finalize', protectAuth, finalizeCheckout);
+
 
 export default router

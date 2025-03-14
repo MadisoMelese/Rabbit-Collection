@@ -39,7 +39,7 @@ const updateCheckout = async (req, res) => {
   const { paymentStatus, paymentDetails } = req.body;
 
   try {
-    const checkout = await Checkout.findOne(req.params.id);
+    const checkout = await Checkout.findById(req.params.id);
     if (!checkout) {
       return res
         .status(404)
@@ -67,40 +67,46 @@ const updateCheckout = async (req, res) => {
 // finalize checkout 
 const finalizeCheckout = async (req, res) => {
   try {
-    const checkout = await Checkout.findById(req.params.id)
-    if (!checkout) {
-      return res.status(404).json({success:false, message: "Chech out not foound"})
-    }
-    if (checkout.isPaid && !checkout.isFinalized) {
-      // create final order based on the checkout details
-      const finalOrder = await Order.create({
-        user:user.checkout, 
-        orderItems:checkout.orderItems,
-        shippingAddress:ch  .shippingAddress,
-        paymentMethod:checkout.paymentMethod,
-        paymentDetails:checkout.paymentDetails,
-        totalPrice:checkout.totalPrice,
-        isPaid:true,
-        paidAt: checkout.paidAt,
-        isDelivered:false,
-        paymentStatus:"paid",
-      })
+    const checkout = await Checkout.findById(req.params.id);
+    console.log("checkout:", checkout);
 
-      // mark the checkout as finalized
-      checkout.isFinalized=true;
-    checkout.finalizedAt= Date.now();
-    await checkout.save()
-    // Delete the cart associated with user
-    await Cart.findOneAndDelete({user:checkout.user})
-    return res.status(201).json({success:true, finalOrder})
-      } else if(checkout.isFinalized){
-      return res.status(400).json({success:false, message:"chechout already finalized!"})
-    }else{
-      return res.status(400).json({success:false, message:"checkout is not paid!"})
+    if (!checkout) {
+      return res.status(404).json({ success: false, message: "Checkout not found" });
+    }
+
+    if (checkout.isPaid && !checkout.isFinalized) {
+      // Create final order based on the checkout details
+      const finalOrder = await Order.create({
+        user: checkout.user, 
+        orderItems: checkout.checkoutItems,
+        shippingAddress: checkout.shippingAddress, // Fixed typo
+        paymentMethod: checkout.paymentMethod,
+        paymentDetails: checkout.paymentDetails,
+        totalPrice: checkout.totalPrice,
+        isPaid: true,
+        paidAt: checkout.paidAt,
+        isDelivered: false,
+        paymentStatus: "paid",
+      });
+
+      // Mark the checkout as finalized
+      checkout.isFinalized = true;
+      checkout.finalizedAt = Date.now();
+      await checkout.save();
+
+      // Delete the cart associated with the user
+      await Cart.findOneAndDelete({ user: checkout.user });
+
+      return res.status(201).json({ success: true, finalOrder });
+    } else if (checkout.isFinalized) {
+      return res.status(400).json({ success: false, message: "Checkout already finalized!" });
+    } else {
+      return res.status(400).json({ success: false, message: "Checkout is not paid!" });
     }
   } catch (error) {
-    console.error("Server error in finalize check out!", error)
-    res.status(500).json({success:false, message:"Server error in finalize check out!"})
+    console.error("Server error in finalize checkout!", error);
+    return res.status(500).json({ success: false, message: "Server error in finalize checkout!" });
   }
-}
+};
+
 export { createCheckout, updateCheckout, finalizeCheckout };
