@@ -1,5 +1,7 @@
-import {order} from '../models/Order.js'
+import {Order, order} from '../models/Order.js'
 
+// access:private,
+// get logged in user orders
 const myOrders = async (req, res) => {
   try {
     // find orders for the authenticated user
@@ -11,5 +13,17 @@ const myOrders = async (req, res) => {
   }
 }
 
+// get single order by id
+// access : private
+const getSingleOrder = async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "name email"
+  )
+  if (!order) {
+    return res.status(404).json({success:false, message:"order not found!"})
+  }
+  res.status(200).json({success:true, order})
+}
 
 export {myOrders}
