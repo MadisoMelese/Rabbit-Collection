@@ -26,4 +26,4 @@ const getSingleOrder = async (req, res) => {
   res.status(200).json({success:true, order})
 }
 
-export {myOrders}
+export {myOrders, getSingleOrder }
