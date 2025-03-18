@@ -18,7 +18,7 @@ const ProdictManagement = () => {
 
   const handleDelete = (productId)=>{
     if(window.confirm("are you sure you want to delete the product?")){
-    console.log(`product with id ${productId} dleted successfully`)
+    console.log(`product with id ${productId} deleted successfully`)
     }
   }
   return (
