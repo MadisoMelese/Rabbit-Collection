@@ -1,11 +1,11 @@
-import {Order, order} from '../models/Order.js'
+import Order from '../models/Order.js'
 
 // access:private,
 // get logged in user orders
 const myOrders = async (req, res) => {
   try {
     // find orders for the authenticated user
-    const orders = await order.find({user: req.user._id}).sort({createdAt:-1})
+    const orders = await Order.find({user: req.user._id}).sort({createdAt:-1})
     res.status(200).json({success:true, orders})
   } catch (error) {
     console.error("Server error in getting orders", error)
@@ -21,7 +21,7 @@ const getSingleOrder = async (req, res) => {
     "name email"
   )
   if (!order) {
-    return res.status(404).json({success:false, message:"order not found!"})
+    return res.status(404).json({success:false, message:`order not found under User = Id ${req.params.id}!`})
   }
   res.status(200).json({success:true, order})
 }
