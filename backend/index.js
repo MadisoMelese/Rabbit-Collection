@@ -29,6 +29,7 @@ import authroutes from './routes/userRoutes.js';
 import cart from './routes/cartRoutes.js';
 import  Checkout  from './routes/checkoutRoutes.js';
 import  orderRoutes  from './routes/orderRoutes.js';
+import  uploadRoutes  from './routes/uploadRoutes.js';
 const app = express();
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -42,6 +43,7 @@ app.use('/api/products', productroutes);
 app.use('/api/cart', cart);
 app.use('/api/checkout', Checkout);
 app.use('/api/orderRoutes', orderRoutes);
+app.use('/api/uploadRoutes', uploadRoutes);
 
 
 const PORT = process.env.PORT || 3000
