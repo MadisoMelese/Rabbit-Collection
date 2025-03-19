@@ -70,8 +70,6 @@ const signup = async (req, res) => {
 
 // PORT=9000
 
-
-
 // Get all users
 const getAllUsers = async (req, res) => {
   try {

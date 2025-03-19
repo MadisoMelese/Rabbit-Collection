@@ -15,7 +15,6 @@ const AdminSidebar = () => {
           Rabbit
         </Link>
       </div>
-
       <h2 className="text-xl font-medium mb-6 text-center">Admin Dashboard</h2>
       <nav className="flex flex-col space-y-2">
         <Reusablesidebar to="/admin/users" icon={FaUser} label="Users" />
