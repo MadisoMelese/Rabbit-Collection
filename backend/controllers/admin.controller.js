@@ -21,6 +21,8 @@ const adminGetAllUsers = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+
 const adminCreateNewUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   if (!email || !password || !name || !role) {
@@ -86,10 +88,25 @@ const adminUpdateUser = async (req, res) => {
    user.email=req.body.email||user.email;
    user.role=req.body.role||user.role;
    const updatedUser = await user.save();
-   res.status(200).json({success:true, updatedUser:updatedUser})
+   res.status(200).json({success:true, message:"user updated successfully!", user:updatedUser})
   } catch (error) {
     res.status(500).json({success:false, message:"Server error in admin updating user by id!"})
   }
 }
 
-export {adminCreateNewUser, adminGetAllUsers, adminUpdateUser}
+const adminDeleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id);
+    if (user) {
+      await user.deleteOne();
+      return res.status(200).json({success:true, message:"User deleted successfully!"})
+    } else {
+      return res.status(404).json({success:false, message:`user with Id ${id} not found!`})
+    }
+  } catch (error) {
+    res.status(500).json({success:false, message:"Server error in deleting user through admin panel"})
+  }
+}
+
+export {adminCreateNewUser, adminGetAllUsers, adminUpdateUser, adminDeleteUser}
