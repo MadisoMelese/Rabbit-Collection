@@ -22,7 +22,18 @@ const adminGetAllUsers = async (req, res) => {
   }
 };
 
-
+const adminGetsingleUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id)
+    if (!user) {
+      return res.status(404).json({success:false, message:`user with Id ${id} not found in DB!`})
+    }
+    res.status(200).json({success:true, message:"user found in DB!", user:user})
+  } catch (error) {
+    res.status(500).json({success:false, message:"Server error in getting single user by Id!"})
+  }
+}
 const adminCreateNewUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   if (!email || !password || !name || !role) {
@@ -109,4 +120,4 @@ const adminDeleteUser = async (req, res) => {
   }
 }
 
-export {adminCreateNewUser, adminGetAllUsers, adminUpdateUser, adminDeleteUser}
+export {adminCreateNewUser, adminGetAllUsers, adminUpdateUser, adminDeleteUser, adminGetsingleUser}
