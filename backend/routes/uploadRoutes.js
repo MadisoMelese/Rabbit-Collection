@@ -5,5 +5,5 @@ const router = express.Router();
 import { uploadImage, upload } from '../controllers/upload.controller.js';
 
 
-router.post('/', upload.single('image'), uploadImage)
+router.post('/', protectAuth, admin, upload.single('image'), uploadImage)
 export default router;
