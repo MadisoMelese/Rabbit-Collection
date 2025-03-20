@@ -87,6 +87,7 @@ const adminCreateNewUser = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+// 
 
 const adminUpdateUser = async (req, res) => {
   const id = req.params.id
@@ -104,7 +105,6 @@ const adminUpdateUser = async (req, res) => {
     res.status(500).json({success:false, message:"Server error in admin updating user by id!"})
   }
 }
-
 const adminDeleteUser = async (req, res) => {
   const id = req.params.id;
   try {

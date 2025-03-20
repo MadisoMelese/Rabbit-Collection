@@ -21,7 +21,6 @@ try {
   const {collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, limit}= req.query;
 
   let query = {}
-
   // filtering logic
   if (collection && collection.toLocaleLowerCase() !== "all") {
     query.collections=collection;
