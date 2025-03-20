@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post('/createUser', protectAuth, admin, adminCreateNewUser)
 router.get('/users', protectAuth, admin, adminGetAllUsers)
-router.get('/users/:id', protectAuth, admin, adminUpdateUser)
+router.put('/users/:id', protectAuth, admin, adminUpdateUser)
 
 
 export default router

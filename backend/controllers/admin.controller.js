@@ -76,7 +76,7 @@ const adminCreateNewUser = async (req, res) => {
 };
 
 const adminUpdateUser = async (req, res) => {
-  const id = req.param.id
+  const id = req.params.id
   try {
   const user = await User.findById(id)
    if (!user) {
@@ -85,7 +85,6 @@ const adminUpdateUser = async (req, res) => {
    user.name=req.body.name||user.name;
    user.email=req.body.email||user.email;
    user.role=req.body.role||user.role;
-   
    const updatedUser = await user.save();
    res.status(200).json({success:true, updatedUser:updatedUser})
   } catch (error) {
