@@ -42,4 +42,25 @@ const updateOrder = async (req, res) => {
   }
 }
 
-export {getOrders, updateOrder}
+const deleteOrder = async (req, res) => {
+  const id = req.params.id
+  try {
+    const order = await Order.findById(id)
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+    await order.deleteOne()
+    res.status(200).json({
+      success: true,
+      message: "Order deleted successfully!"
+    });
+}
+catch (error) {
+  res.status(500).json({success:false, message:"Internal server error in deleting order through admin!"})
+}
+}
+
+export {getOrders, updateOrder, deleteOrder}
