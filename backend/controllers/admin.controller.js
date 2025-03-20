@@ -21,7 +21,6 @@ const adminGetAllUsers = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 const adminCreateNewUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   if (!email || !password || !name || !role) {
@@ -76,4 +75,22 @@ const adminCreateNewUser = async (req, res) => {
   }
 };
 
-export {adminCreateNewUser, adminGetAllUsers}
+const adminUpdateUser = async (req, res) => {
+  const id = req.param.id
+  try {
+  const user = await User.findById(id)
+   if (!user) {
+    return res.status(400).json({success:false, message:`user with id ${id} not found in DB`})
+   } 
+   user.name=req.body.name||user.name;
+   user.email=req.body.email||user.email;
+   user.role=req.body.role||user.role;
+   
+   const updatedUser = await user.save();
+   res.status(200).json({success:true, updatedUser:updatedUser})
+  } catch (error) {
+    res.status(500).json({success:false, message:"Server error in admin updating user by id!"})
+  }
+}
+
+export {adminCreateNewUser, adminGetAllUsers, adminUpdateUser}
