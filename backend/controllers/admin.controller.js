@@ -3,7 +3,24 @@ import { sendVerificationEmail } from "../mailtrap/emails.js";
 import { User } from "../models/User.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
-
+const adminGetAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}); // Exclude passwords from all users
+    if (!users.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No users found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
 
 const adminCreateNewUser = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -59,4 +76,4 @@ const adminCreateNewUser = async (req, res) => {
   }
 };
 
-export {adminCreateNewUser}
+export {adminCreateNewUser, adminGetAllUsers}
