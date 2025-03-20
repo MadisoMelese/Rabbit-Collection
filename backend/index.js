@@ -10,6 +10,7 @@ import  orderRoutes  from './routes/orderRoutes.js';
 import  uploadRoutes  from './routes/uploadRoutes.js';
 import  subscribeRoute  from './routes/subscribeRoutes.js';
 import  adminRoutes  from './routes/adminRoutes.js';
+import  adminProductRoutes  from './routes/adminProductRoutes.js';
 
 const app = express();
 app.use(cors({
@@ -27,6 +28,7 @@ app.use('/api/orderRoutes', orderRoutes);
 app.use('/api/uploadRoutes', uploadRoutes);
 app.use('/api/subscriber', subscribeRoute);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/products', adminProductRoutes);
 
 
 const PORT = process.env.PORT || 3000
