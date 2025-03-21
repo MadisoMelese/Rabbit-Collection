@@ -6,11 +6,12 @@ import { useDispatch } from "react-redux";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispacth(loginUser({ email, password }));
+    console.log({email, password})
+    dispatch(loginUser({ email, password }));
   }
   return (
     <div className="flex">
