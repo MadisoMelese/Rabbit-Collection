@@ -50,11 +50,12 @@ const signup = async (req, res) => {
         role: user.role,
       },
     };
-    generateTokenAndSetCookie(res, userifo);
+    const token = generateTokenAndSetCookie(res, userifo);
     await sendVerificationEmail(user.email, verificationToken);
     res.status(201).json({
       success: true,
       message: "User created successfully",
+      token,
       user: {
         ...user._doc,
         password: undefined,

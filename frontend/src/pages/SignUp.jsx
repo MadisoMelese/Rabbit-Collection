@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import register from "../assets/register.webp";
-import { registerUser } from "../redux/slice/auth.slice.js";
+import { registerUser } from "../redux/slice/auth.slice";
 import { useDispatch } from "react-redux";
 
 const SignUp = () => {
@@ -13,7 +13,7 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("user info: ", { fullname, email, password });
-    dispatch(registerUser({ email, password, fullname }));
+    dispatch(registerUser({ fullname, email, password  }));
   };
 
   return (
