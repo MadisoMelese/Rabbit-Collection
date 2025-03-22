@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import register from "../assets/register.webp";
-import { registerUser } from "../redux/slice/auth.slice";
+import { registerUser } from "../redux/slice/auth.slice.js";
 import { useDispatch } from "react-redux";
 
 const SignUp = () => {
