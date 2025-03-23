@@ -180,7 +180,7 @@ const login = async (req, res) => {
         });
     }
 
-    generateTokenAndSetCookie(res, user._id);
+   const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
@@ -192,6 +192,7 @@ const login = async (req, res) => {
         ...user._doc,
         password: undefined,
       },
+      token,
     });
   } catch (err) {
     console.log("Error in Login", err);
