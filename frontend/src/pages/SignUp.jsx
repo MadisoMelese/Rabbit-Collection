@@ -7,13 +7,13 @@ import { useDispatch } from "react-redux";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullname, setFullname] = useState("");
+  const [name, setName] = useState("");
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("user info: ", { fullname, email, password });
-    dispatch(registerUser({ fullname, email, password  }));
+    console.log("user info: ", { name, email, password });
+    dispatch(registerUser({name, email, password }));
   };
 
   return (
@@ -34,8 +34,8 @@ const SignUp = () => {
             <label className="block text-sm font-semibold mb-2">Fullname</label>
             <input
               type="fullname"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your Fullname"
               className="w-full p-2 border border-gray-500   rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 "
               autoFocus

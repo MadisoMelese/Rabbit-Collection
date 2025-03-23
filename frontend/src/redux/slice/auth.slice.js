@@ -10,7 +10,6 @@ const intialGuestId = localStorage.getItem('guestId') || `guest_${new Date().get
 localStorage.setItem ('guestId', intialGuestId);
 
 // initial state
-
 const initialState = {
   userInfo: userFromStorage,
   guestId: intialGuestId,
