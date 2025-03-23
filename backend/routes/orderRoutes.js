@@ -5,6 +5,6 @@ import { myOrders, getSingleOrder } from './../controllers/order.controller.js';
 
 
 router.get("/myorders", protectAuth, myOrders)
-router.get("/myorders/:id", protectAuth, getSingleOrder)
+router.get("/:id", protectAuth, getSingleOrder)
 
 export default router
