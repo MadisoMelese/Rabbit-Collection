@@ -64,4 +64,14 @@ const adminOrderSlice = createSlice({
     error: null,
   },
   reducers: {},
-  extraReducers: ()
+  extraReducers: (builder) =>{
+    builder
+    .addCase(fetchAllOrders.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchAllOrders.fulfilled, (state, action) => {
+      state.loading:false
+  }),
+
+});
