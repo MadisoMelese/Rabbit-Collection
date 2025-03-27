@@ -64,19 +64,6 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-// // get single product
-// export const fetchSingleProduct = createAsyncThunk("admin/fetchSingleProduct", async (id) => {
-//     const response = await axios.get(
-//       `${API_URL}/api/products/${id}`,
-//       {
-//         headers: {
-//           Authorization: USER_TOKEN,
-//         },
-//       }
-//     );
-//     return response.data;
-// })
-
 const adminProductSlice = createSlice({
   name: "adminProduct",
   initialState: {

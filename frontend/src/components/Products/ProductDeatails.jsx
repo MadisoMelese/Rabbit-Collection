@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
@@ -18,7 +16,7 @@ const ProductDetails = ({ productId }) => {
     (state) => state.products
   );
   const { user, guestId } = useSelector((state) => state.auth);
-
+  console.log(selectedProduct)
   const [mainImage, setMainImage] = useState(null);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -56,9 +54,12 @@ const ProductDetails = ({ productId }) => {
   // Handle adding product to the cart
   const handleAddtoCart = () => {
     if (!selectedColor || !selectedSize) {
-      toast.error("Please select both size and color before adding to the cart.", {
-        duration: 1000,
-      });
+      toast.error(
+        "Please select both size and color before adding to the cart.",
+        {
+          duration: 1000,
+        }
+      );
       return;
     }
 
@@ -96,8 +97,7 @@ const ProductDetails = ({ productId }) => {
 
   return (
     <div className="p-6">
-{selectedProduct&&(
-
+      {selectedProduct && (
         <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
           <div className="flex flex-col md:flex-row">
             {/* Left Thumbnails */}
@@ -154,7 +154,9 @@ const ProductDetails = ({ productId }) => {
               <p className="text-xl text-gray-500 mb-2">
                 {selectedProduct.price && `$${selectedProduct.price}`}
               </p>
-              <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
+              <p className="text-gray-600 mb-4">
+                {selectedProduct.description}
+              </p>
 
               {/* Color Selector */}
               <div className="mb-4">

@@ -22,6 +22,7 @@ const Home = () => {
         `${import.meta.env.VITE_BACKEND_URL}/api/products/bestSeller`
       );
       setBestSellerProduct(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("Error in fetching best seller product: ", error);
     }
