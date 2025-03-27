@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -8,129 +9,21 @@ const NewArrivals = () => {
   const [scrollLeft, setScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [newArraivals, setNewArraivals] = useState([]);
 
-  const newArraivals = [
-    {
-      _id: "1",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=1",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "2",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=2",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "3",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=3",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "4",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=4",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "5",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=5",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "6",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=6",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "7",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=7",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "9",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=9",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "10",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=10",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-
-    {
-      _id: "11",
-      name: "Stylish Jackect",
-      price: 90,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=11",
-          altText: "Stylish Jackect",
-        },
-      ],
-    },
-  ];
-
+useEffect(()=>{
+  const fetchNewArraivals = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/newArrivals`
+      );
+      setNewArraivals(response.data);
+    } catch (error) {
+      console.error("Error in fetching new arrivals: ", error);
+    }
+  };
+  fetchNewArraivals();
+}, [])
   const scroll = (direction) => {
     const scrollAmount = direction === "left" ? -500 : 500;
     scrollRef.current.scrollBy({
@@ -158,7 +51,7 @@ const NewArrivals = () => {
       updateScrollButtons();
       return () => container.removeEventListener("scroll", updateScrollButtons);
     }
-  }, []);
+  }, [newArraivals]);
 
   // Mouse Down
   const handleMouseDown = (e) => {

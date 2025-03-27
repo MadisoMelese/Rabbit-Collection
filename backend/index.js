@@ -25,7 +25,7 @@ app.use('/api/auth', authroutes);
 app.use('/api/products', productroutes);
 app.use('/api/cart', cart);
 app.use('/api/checkout', Checkout);
-app.use('/api/orders', orderRoutes);
+app.use('/api/orders', orders);
 app.use('/api/uploadRoutes', uploadRoutes);
 app.use('/api/subscriber', subscribeRoute);
 app.use('/api/admin', adminRoutes);
