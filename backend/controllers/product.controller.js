@@ -102,7 +102,7 @@ const getProductById = async (req, res) => {
 
   } catch (error) {
    console.log("Error in finding product by id: ", error) 
-   json.status(500).json({success:false, message:"server error in finding product by id!"})
+   res.status(500).json({success:false, message:"server error in finding product by id!"})
   }
 }
 // @access: public
