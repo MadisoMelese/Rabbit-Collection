@@ -18,7 +18,7 @@ const seedData = async ()=>{
     // create default admin user 
     const hashedPassword = await bcrypt.hash("12345678", 10);
 
-    const creatdeUser = await User.create({
+    const createdUser = await User.create({
       name:"Admin User",
       email:"admin@example.com",
       password:hashedPassword,
@@ -26,7 +26,7 @@ const seedData = async ()=>{
     });
 
     // Assign the default id to each product
-    const userID = creatdeUser._id;
+    const userID = createdUser._id;
 
     const sampleProducts = products.map((product)=>{
       return {...product, user:userID}
@@ -41,7 +41,6 @@ const seedData = async ()=>{
   } catch (error) {
     console.error("Error seeding the data:", error)
     process.exit(1);
-
   }
 }
 
