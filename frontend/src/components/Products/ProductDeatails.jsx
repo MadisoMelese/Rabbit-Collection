@@ -10,7 +10,7 @@ import {
 import { addToCart } from "../../redux/slice/cart.Slice.js";
 
 const ProductDetails = ({ productId }) => {
-  const { id } = useParams();
+  const id  = useParams();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector(
     (state) => state.products

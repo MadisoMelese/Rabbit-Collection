@@ -13,7 +13,7 @@ import axios from "axios";
 const Home = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
-  const [bestSellerProduct, setBestSellerProduct] = useState("");
+  const [bestSellerProduct, setBestSellerProduct] = useState([]);
 
   // fetch products for a specific collection
   const fetchBestSeller = async () => {
