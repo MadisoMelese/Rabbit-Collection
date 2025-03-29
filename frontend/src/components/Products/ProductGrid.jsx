@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const ProductGrid = ({ products, loading, error }) => {
-  console.log("Products:", products);
+  console.log("Products in product grid jsx:", products);
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -11,8 +11,8 @@ const ProductGrid = ({ products, loading, error }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {products.map((product, index) => {
-        const imageUrl = product.images?.length ? product.images[0].url : "https://picsum.photos/500/500?random=47";
+      {products && products.map((product, index) => {
+        const imageUrl = product.images[0].url;
         return (
           <Link key={product._id || index} to={`/product/${product._id}`} className="block">
             <div className="bg-white p-4 rounded-lg">

@@ -83,8 +83,8 @@ try {
   // fetching products and apply sorting and limit
   let products = await Product.find(query).sort(sort).limit(Number(limit) || 0)
 
-    console.log("Products: ", products)
-    res.json(products)
+    console.log(products)
+    res.status(200).json(products)
   } catch (err) {
     console.error("Error in fetching products", err)
     res.status(500).json({ message: err.message })
