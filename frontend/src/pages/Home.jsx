@@ -13,7 +13,7 @@ import axios from "axios";
 const Home = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
-  const [bestSellerProduct, setBestSellerProduct] = useState("")
+  const [bestSellerProduct, setBestSellerProduct] = useState("");
 
   // fetch products for a specific collection
   const fetchBestSeller = async () => {
@@ -21,22 +21,23 @@ const Home = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/products/bestSeller`
       );
-      console.log(response.data)
+      console.log(response.data);
       setBestSellerProduct(response.data);
     } catch (error) {
       console.error("Error in fetching best seller product: ", error);
     }
   };
-  
+
   useEffect(() => {
-    dispatch(fetchProductsByFilters({ 
-      gender: "Women", 
-      category: "Bottom Wear", 
-      limit: 8 
-    }));
+    dispatch(
+      fetchProductsByFilters({
+        gender: "Women",
+        category: "Bottom Wear",
+        limit: 8,
+      })
+    );
     fetchBestSeller();
   }, [dispatch]);
-  
 
   return (
     <>
@@ -47,8 +48,8 @@ const Home = () => {
       {/* best seller */}
       <h2 className="text-3xl text-center font-bold mb-4">Best Seller</h2>
       {bestSellerProduct && (
-  <ProductDetails productId={bestSellerProduct._id} />
-)}
+        <ProductDetails productId={bestSellerProduct._id} />
+      )}
 
       <div className="container mx-auto">
         <h2 className="text-3xl text-center font-bold mb-4">
