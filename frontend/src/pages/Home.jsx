@@ -22,7 +22,7 @@ const Home = () => {
         `${import.meta.env.VITE_BACKEND_URL}/api/products/bestSeller`
       );
       console.log("productsertghjk", response.data.homie);
-      setBestSellerProduct(response.data.homie);
+      setBestSellerProduct(response.data.bestSellerProduct);
     } catch (error) {
       console.error("Error in fetching best seller product: ", error);
     }
