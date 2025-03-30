@@ -86,7 +86,7 @@ const productsSlice = createSlice({
     products: [],
     loading: false,
     error: null,
-    selectedProduct: null,
+    selectedProduct: [],
     similarProducts: [],
     filters: {
       collection: "",

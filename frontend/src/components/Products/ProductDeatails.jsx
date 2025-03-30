@@ -35,8 +35,8 @@ const ProductDetails = ({ productId }) => {
 
   // Set the main image when the product is loaded
   useEffect(() => {
-    if (selectedProduct?.images?.length > 0) {
-      setMainImage(selectedProduct.images[0].url);
+    if (selectedProduct.product?.images?.length > 0) {
+      setMainImage(selectedProduct.product.images[0].url);
     } else {
       setMainImage(null); // Fallback
     }
@@ -98,12 +98,12 @@ const ProductDetails = ({ productId }) => {
 
   return (
     <div className="p-6">
-      {selectedProduct && (
+      {selectedProduct.product && (
         <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
           <div className="flex flex-col md:flex-row">
             {/* Left Thumbnails */}
             <div className="hidden md:flex flex-col space-y-4 mr-6">
-              {selectedProduct?.images?.map((image, index) => (
+              {selectedProduct.product?.images?.map((image, index) => (
                 <img
                   key={index}
                   src={image.url}
@@ -122,7 +122,7 @@ const ProductDetails = ({ productId }) => {
                 {mainImage && (
                   <img
                     src={mainImage}
-                    alt={selectedProduct.name || `Main Product`}
+                    alt={selectedProduct.product.name || `Main Product`}
                     className="w-full h-auto object-cover rounded-lg"
                   />
                 )}
@@ -131,7 +131,7 @@ const ProductDetails = ({ productId }) => {
 
             {/* Mobile Thumbnails */}
             <div className="md:hidden flex overscroll-x-auto space-x-4 mb-4">
-              {selectedProduct?.images?.map((image, index) => (
+              {selectedProduct.product?.images?.map((image, index) => (
                 <img
                   key={index}
                   src={image.url}
@@ -147,25 +147,25 @@ const ProductDetails = ({ productId }) => {
             {/* Product Details */}
             <div className="md:w-1/2 md:ml-10">
               <h1 className="text-2xl md:text-3xl font-semibold mb-2">
-                {selectedProduct.name}
+                {selectedProduct.product.name}
               </h1>
               <p className="text-lg text-gray-600 mb-1 line-through">
-                ${selectedProduct.originalPrice}
+                ${selectedProduct?.product.price}
               </p>
               <p className="text-xl text-gray-500 mb-2">
-                {selectedProduct?.price
-                  ? `$${selectedProduct.price}`
+                {selectedProduct.product?.discountPrice
+                  ? `$${selectedProduct.product.discountPrice}`
                   : "Price not available"}
               </p>
               <p className="text-gray-600 mb-4">
-                {selectedProduct.description}
+                {selectedProduct.product.description}
               </p>
 
               {/* Color Selector */}
               <div className="mb-4">
                 <p className="text-gray-700">Color: </p>
                 <div className="flex gap-2 mt-2">
-                  {selectedProduct?.colors?.map((color) => (
+                  {selectedProduct.product?.colors?.map((color) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
@@ -187,7 +187,7 @@ const ProductDetails = ({ productId }) => {
               <div className="mb-4">
                 <p className="text-gray-700">Size: </p>
                 <div className="flex gap-2 mt-2">
-                  {selectedProduct?.sizes?.map((size) => (
+                  {selectedProduct.product?.sizes?.map((size) => (
                     <button
                       onClick={() => setSelectedSize(size)}
                       key={size}
@@ -243,11 +243,11 @@ const ProductDetails = ({ productId }) => {
                   <tbody>
                     <tr>
                       <td className="py-1">Brand:</td>
-                      <td className="py-1">{selectedProduct.brand}</td>
+                      <td className="py-1">{selectedProduct.product.brand}</td>
                     </tr>
                     <tr>
                       <td className="py-1">Material:</td>
-                      <td className="py-1">{selectedProduct.material}</td>
+                      <td className="py-1">{selectedProduct.product.material}</td>
                     </tr>
                   </tbody>
                 </table>

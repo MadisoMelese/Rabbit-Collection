@@ -14,6 +14,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
   const [bestSellerProduct, setBestSellerProduct] = useState(null);
+  console.log("products in women section", products)
 
   useEffect(()=>{
     // 
@@ -49,7 +50,7 @@ const Home = () => {
       {/* best seller */}
       <h2 className="text-3xl text-center font-bold mb-4">Best Seller</h2>
       {bestSellerProduct ? (
-        <ProductDetails productId={bestSellerProduct._id} />
+        <ProductDetails productId={bestSellerProduct._id} loading={loading} error={error}/>
       ) : (<p className="text-center">Loading for best products...</p>)}
 
       <div className="container mx-auto">

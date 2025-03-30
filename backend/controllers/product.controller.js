@@ -129,11 +129,10 @@ const similarProduct = async (req, res) => {
 const bestSeller = async (req, res) => {
   try {
     const bestSeller = await Product.findOne().sort({rating: -1})
-    if (bestSeller) {
-      res.status(200).json(bestSeller)
-    }else{
-      res.status(404).json({message:"No best Seller"})
+    if (!bestSeller) {
+     return res.status(404).json({message:"No best Seller"})
     }
+    res.status(200).json(bestSeller)
   } catch (error) {
     console.log("Error in best seller", error)
     res.status(500).send("Server error in best seller section")
