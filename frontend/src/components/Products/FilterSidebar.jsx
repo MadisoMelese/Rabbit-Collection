@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterSidebar = () => {
-  const [searParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [filters, setFiters] = useState({
+  const [filters, setFilters] = useState({
     category: "",
     gender: "",
     color: "",
@@ -32,7 +32,7 @@ const FilterSidebar = () => {
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
   const materials = [
     "Cotton",
-    "wool",
+    "Wool",
     "Polyester",
     "Silk",
     "Linen",
@@ -43,7 +43,7 @@ const FilterSidebar = () => {
   const brands = [
     "Urban Threads",
     "Modern Fit",
-    "Street style",
+    "Street Style",
     "Beach Breeze",
     "Fashionista",
     "ChicStyle",
@@ -51,22 +51,21 @@ const FilterSidebar = () => {
   const genders = ["Men", "Women"];
 
   useEffect(() => {
-    const params = Object.fromEntries([...searParams]);
+    const params = Object.fromEntries([...searchParams]);
 
-    setFiters({
+    setFilters({
       category: params.category || "",
       gender: params.gender || "",
       color: params.color || "",
       size: params.size ? params.size.split(",") : [],
       material: params.material ? params.material.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
-      minPrice: params.minPrice || 0,
-      maxPrice: params.maxPrice || 100,
+      minPrice: Number(params.minPrice) || 0,
+      maxPrice: Number(params.maxPrice) || 100,
     });
-    setPriceRange([0, params.maxPrice || 100]);
-  }, [searParams]);
+    setPriceRange([0, Number(params.maxPrice) || 100]);
+  }, [searchParams]);
 
-  // select filters functionality
   const handleFilterChange = (e) => {
     const { name, value, checked, type } = e.target;
 
@@ -81,17 +80,30 @@ const FilterSidebar = () => {
       newFilters[name] = value;
     }
 
-    setFiters(newFilters);
+    setFilters(newFilters);
     updateURLParams(newFilters);
   };
-  // product apper in the search bar
+
+  // color change 
+  const handleColorChange = (color) => {
+    const newFilters = { ...filters };
+  
+    if (filters.color === color) {
+      delete newFilters.color;
+    } else {
+      newFilters.color = color;
+    }
+    setFilters(newFilters);
+    updateURLParams(newFilters);
+  };
+
   const updateURLParams = (newFilters) => {
     const params = new URLSearchParams();
     Object.keys(newFilters).forEach((key) => {
       if (Array.isArray(newFilters[key]) && newFilters[key].length > 0) {
-        params.append(key, newFilters[key].join(","));
+        params.set(key, newFilters[key].join(","));
       } else if (newFilters[key]) {
-        params.append(key, newFilters[key]);
+        params.set(key, newFilters[key]);
       }
     });
 
@@ -103,7 +115,7 @@ const FilterSidebar = () => {
     <div className="p-4">
       <h3 className="text-xl font-medium text-gray-800 mb-4">Filter</h3>
 
-      {/* Category Filter*/}
+      {/* Category Filter */}
       <div className="mb-6">
         <label className="block text-gray-900 font-medium mb-2">Category</label>
         {categories.map((category) => (
@@ -124,7 +136,7 @@ const FilterSidebar = () => {
         ))}
       </div>
 
-      {/* Gender Filter*/}
+      {/* Gender Filter */}
       <div className="mb-6">
         <label className="block text-gray-900 font-medium mb-2">Gender</label>
         {genders.map((gender) => (
@@ -151,21 +163,19 @@ const FilterSidebar = () => {
         <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
-              value={color}
-              onClick={handleFilterChange}
-              name="color"
               key={color}
               className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer transition hover:scale-105 ${
                 filters.color === color ? "ring-2 ring-blue-500" : ""
               }`}
               title={color}
               style={{ backgroundColor: color.toLowerCase() }}
+              onClick={() => handleColorChange(color)}
             ></button>
           ))}
         </div>
       </div>
 
-      {/* Size filter */}
+      {/* Size Filter */}
       <div className="mb-6">
         <label className="block text-gray-900 font-medium mb-2">Size</label>
         {sizes.map((size) => (
@@ -186,7 +196,7 @@ const FilterSidebar = () => {
         ))}
       </div>
 
-      {/* Material filter */}
+      {/* Material Filter */}
       <div className="mb-6">
         <label className="block text-gray-900 font-medium mb-2">Material</label>
         {materials.map((material) => (
@@ -207,7 +217,7 @@ const FilterSidebar = () => {
         ))}
       </div>
 
-      {/* Brand filter */}
+      {/* Brand Filter */}
       <div className="mb-6">
         <label className="block text-gray-900 font-medium mb-2">Brand</label>
         {brands.map((brand) => (
@@ -228,11 +238,9 @@ const FilterSidebar = () => {
         ))}
       </div>
 
-      {/* Price fiter */}
+      {/* Price Filter */}
       <div className="mb-8">
-        <label className="block text-gray-900 mb-2 font-medium">
-          Price Range
-        </label>
+        <label className="block text-gray-900 mb-2 font-medium">Price Range</label>
         <div className="flex items-center gap-2">
           <input
             type="range"
@@ -240,7 +248,7 @@ const FilterSidebar = () => {
             min={0}
             max={100}
             value={priceRange[1]}
-            onChange={(e) => handleFilterChange(e, "max")}
+            onChange={(e) => handleFilterChange(e)}
             className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
         </div>
@@ -249,7 +257,6 @@ const FilterSidebar = () => {
           <span>${priceRange[1]}</span>
         </div>
       </div>
-      
     </div>
   );
 };

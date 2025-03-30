@@ -3,67 +3,24 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOption from "../components/Products/SortOption";
 import ProductGrid from "../components/Products/ProductGrid";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsByFilters } from "../redux/slice/products.slice";
 const CollectionPage = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      const fetchedProducts = [
-        {
-          _id: 1,
-          name: `Product 1`,
-          price: 120,
-          images: [{ url: "https://picsum.photos/500/500?random=1" }],
-        },
-        {
-          _id: 2,
-          name: `Product 2`,
-          price: 220,
-          images: [{ url: "https://picsum.photos/500/500?random=2" }],
-        },
-        {
-          _id: 3,
-          name: `Product 3`,
-          price: 320,
-          images: [{ url: "https://picsum.photos/500/500?random=3" }],
-        },
-        {
-          _id: 4,
-          name: `Product 4`,
-          price: 420,
-          images: [{ url: "https://picsum.photos/500/500?random=4" }],
-        },
-        {
-          _id: 5,
-          name: `Product 5`,
-          price: 520,
-          images: [{ url: "https://picsum.photos/500/500?random=5" }],
-        },
-        {
-          _id: 6,
-          name: `Product 6`,
-          price: 660,
-          images: [{ url: "https://picsum.photos/500/500?random=6" }],
-        },
-        {
-          _id: 7,
-          name: `Product 7`,
-          price: 720,
-          images: [{ url: "https://picsum.photos/500/500?random=7" }],
-        },
-        {
-          _id: 8,
-          name: `Product 8`,
-          price: 820,
-          images: [{ url: "https://picsum.photos/500/500?random=8" }],
-        },
-      ];
-      setProducts(fetchedProducts);
-    }, 1000);
-  }, []);
+  const {collection} = useParams()
+  const [searchParams] = useSearchParams()
+  const dispatch = useDispatch()
+  const {products, loading, error} = useSelector((state)=>state.products)
+  const queryParams = Object.fromEntries([...searchParams])
 
-  const [products, setProducts] = useState([]);
+
+
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  useEffect(()=>{
+    dispatch(fetchProductsByFilters({collection, ...queryParams}))
+  }, [dispatch, searchParams, collection])
   const togglesidebar = () => {
     // console.log("togglesidebar")
     setIsSidebarOpen(!isSidebarOpen);
@@ -110,7 +67,7 @@ const CollectionPage = () => {
         <SortOption />
 
         {/* product grid */}
-        <ProductGrid products={products} />
+        <ProductGrid products={products} loading={loading} error={error}/>
       </div>
     </div>
   );
