@@ -148,10 +148,10 @@ const ProductDetails = ({ productId }) => {
                 {selectedProduct.product.name}
               </h1>
               <p className="text-lg text-gray-600 mb-1 line-through">
-                ${selectedProduct?.product.price}
+               Orginal Price: ${selectedProduct?.product.price}
               </p>
               <p className="text-xl text-gray-500 mb-2">
-                {selectedProduct.product?.discountPrice
+                Discounted Price: {selectedProduct.product?.discountPrice
                   ? `$${selectedProduct.product.discountPrice}`
                   : "Price not available"}
               </p>
