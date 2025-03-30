@@ -6,16 +6,6 @@ const router = express.Router();
 // @access: public
 const getAllProduct = async (req, res) => {
 
-  // simple stack
-//   try {
-//     const products = await Product.find()
-//     console.log("Products: ", products)
-//     res.json(products)
-//   } catch (err) {
-//     res.status(500).json({ message: err.message })
-//   }
-// 
-
 // in hard way but neccessary
 try {
   const {collection, size, color, gender, minPrice, maxPrice, sortBy, search, category, material, brand, limit}= req.query;
@@ -32,22 +22,29 @@ try {
     query.material={$in: material.split(",")};
   }
   if (brand) {
-    query.brand={$in:brand.spilt(",")};
+    query.brand = { $in: brand.split(",") };
   }
   if (size) {
-    query.sizes={$in:size.spilt(",")};
+    query.sizes = { $in: size.split(",") }; // Splitting size into an array
   }
-  if(color){
-    query.colors={$in:[color]}
+  
+  if (color) {
+    const colorArray = color
+      .split(",")
+      .map((c) => new RegExp(`^${c.trim()}$`, "i")); // Case-insensitive regex
+    if (colorArray.length > 0) {
+      query.colors = { $in: colorArray };
+    }
   }
-  if(gender){
-    query.gender=gender
+  
+  if (gender) {
+    query.gender = gender; // Assigning gender directly
   }
-
-  if(minPrice||maxPrice){
-    query.price={}
-    if(minPrice) query.price.gte= Number(minPrice);
-    if(maxPrice) query.price.lte= Number(maxPrice);
+  
+  if (minPrice || maxPrice) {
+    query.price = {}; // Initializing price filter
+    if (minPrice) query.price.$gte = Number(minPrice); // Greater than or equal to minPrice
+    if (maxPrice) query.price.$lte = Number(maxPrice); // Less than or equal to maxPrice
   }
   if(search){
     query.$or=[{
@@ -83,7 +80,7 @@ try {
   // fetching products and apply sorting and limit
   let products = await Product.find(query).sort(sort).limit(Number(limit) || 0)
 
-    console.log(products)
+    // console.log(products)
     res.status(200).json(products)
   } catch (err) {
     console.error("Error in fetching products", err)
