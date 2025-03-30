@@ -16,8 +16,6 @@ const ProductDetails = ({ productId }) => {
     (state) => state.products
   );
   const { user, guestId } = useSelector((state) => state.auth);
-  console.log("selectedProduct in product details jsx", selectedProduct);
-  console.log("similarProducts in product details jsx", similarProducts);
   const [mainImage, setMainImage] = useState(null);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
