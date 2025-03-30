@@ -103,7 +103,7 @@ const productsSlice = createSlice({
     },
   },
   reducers: {
-    setFilters(state, action) {
+    setFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
     clearFilters: (state) => {
@@ -121,7 +121,7 @@ const productsSlice = createSlice({
       };
     },
   },
-  extraReducers:(builder) =>{
+  extraReducers: (builder) =>{
     builder
     .addCase(fetchProductsByFilters.pending, (state) => {
       state.loading = true;
@@ -147,7 +147,7 @@ const productsSlice = createSlice({
   })
     .addCase(fetchProductDetails.rejected, (state, action) => {
       state.loading = false;
-      state.selectedProduct = action.error.message;
+      state.error = action.error.message;
   })
 
   // handle update product
@@ -177,7 +177,7 @@ const productsSlice = createSlice({
   })
   .addCase(fetchSimilarProducts.fulfilled, (state, action) => {
     state.loading = false;
-    state.products = action.payload ;
+    state.similarProducts = action.payload ;
   })
   .addCase(fetchSimilarProducts.rejected, (state, action) => {
     state.loading = false;

@@ -10,14 +10,14 @@ import {
 import { addToCart } from "../../redux/slice/cart.Slice.js";
 
 const ProductDetails = ({ productId }) => {
-  const id  = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct, similarProducts, loading, error } = useSelector(
     (state) => state.products
   );
   const { user, guestId } = useSelector((state) => state.auth);
-  console.log(selectedProduct)
-  console.log("similarProducts", similarProducts)
+  console.log("selectedProduct in product details jsx", selectedProduct);
+  console.log("similarProducts in product details jsx", similarProducts);
   const [mainImage, setMainImage] = useState(null);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -153,7 +153,9 @@ const ProductDetails = ({ productId }) => {
                 ${selectedProduct.originalPrice}
               </p>
               <p className="text-xl text-gray-500 mb-2">
-                {selectedProduct.price && `$${selectedProduct.price}`}
+                {selectedProduct?.price
+                  ? `$${selectedProduct.price}`
+                  : "Price not available"}
               </p>
               <p className="text-gray-600 mb-4">
                 {selectedProduct.description}
@@ -258,7 +260,11 @@ const ProductDetails = ({ productId }) => {
             <h2 className="text-2xl text-center font-medium mb-4 capitalize">
               You May Also Like
             </h2>
-            <ProductGrid products={similarProducts} />
+            <ProductGrid
+              products={similarProducts}
+              loading={loading}
+              error={error}
+            />
           </div>
         </div>
       )}

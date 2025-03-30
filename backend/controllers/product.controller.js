@@ -98,8 +98,7 @@ const getProductById = async (req, res) => {
     if (!product) {
       res.status(404).json({success:false, message:`Product with id ${id} not found!`})
     }
-    res.status(200).json({success:true, Product:product})
-
+    res.status(200).json({success:true, product})
   } catch (error) {
    console.log("Error in finding product by id: ", error) 
    res.status(500).json({success:false, message:"server error in finding product by id!"})
@@ -116,10 +115,10 @@ const similarProduct = async (req, res) => {
     }
     const similarProduct = await Product.find({
       _id: {$ne: id}, //excluding current product id
-      gender:product.gender,
-      category:product.category,
+      gender: product.gender,
+      category: product.category,
     }).limit(4)
-    res.status(200).json({success:true, similarProducts:similarProduct})
+    res.status(200).json(similarProduct)
   } catch (error) {
     console.error("Error in fetching similarproduct!", error)
     res.status(500).send("Server Error in fetching similar products")
@@ -131,7 +130,7 @@ const bestSeller = async (req, res) => {
   try {
     const bestSeller = await Product.findOne().sort({rating: -1})
     if (bestSeller) {
-      res.json(bestSeller)
+      res.status(200).json(bestSeller)
     }else{
       res.status(404).json({message:"No best Seller"})
     }

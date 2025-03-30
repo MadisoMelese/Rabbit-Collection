@@ -11,10 +11,11 @@ const ProductGrid = ({ products, loading, error }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {products && products.map((product, index) => {
+      {products.map((product, index) => {
         const imageUrl = product.images[0].url;
         return (
-          <Link key={product._id || index} to={`/product/${product._id}`} className="block">
+          <Link key={product?._id || index} to={`/product/${product?._id || "#"}`} className="block">
+
             <div className="bg-white p-4 rounded-lg">
               <div className="w-full h-96 mb-4">
                 <img
