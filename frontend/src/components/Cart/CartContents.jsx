@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { removeFromCart, updateCartItemQuantity } from "../../redux/slice/cart.Slice";
 const CartContents = ({cart, userId, guestId}) => {
   const dispatch = useDispatch()
-  const productPrice = cart?.products?.reduce((total, product)=>product.quantity*product.price, 1) || 0
+  // const productPrice = cart?.products?.reduce((total, product)=>product.quantity*product.price, 1) || 0
 
   // handle add to the cart
   const handleAddToCart = (productId, delta, quantity, size, color)=>{
@@ -94,7 +94,7 @@ const CartContents = ({cart, userId, guestId}) => {
             </div>
           </div>
           <div>
-            <p>${productPrice.toLocaleString()}</p>
+          <p>Total: ${(product.price * product.quantity).toLocaleString()}</p>
             <button
             onClick={
               ()=>handleRemoveFromCart(

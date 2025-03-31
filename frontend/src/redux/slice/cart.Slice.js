@@ -58,13 +58,12 @@ export const updateCartItemQuantity = createAsyncThunk("cart/updateCartItemQuant
 })
 
 // remove an item from the cart
-
-export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({userId, guestId, productId, size, color}, {rejectWithValue}) => {
+export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({productId, guestId, userId, size, color}, {rejectWithValue}) => {
   try {
     const response = await axios({
       method: "DELETE",
       url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-      data: {userId, guestId, productId, size, color},
+      data: {productId, guestId, userId, size, color},
     });
     return response.data;
   } catch (error) {
@@ -99,7 +98,7 @@ const cartSlice = createSlice({
   },
   reducers: {
     clearCart: (state) => {
-      state.products = {products: []};
+      state.cart = {products: []};
       localStorage.removeItem("cart");
     },
   },
@@ -153,7 +152,7 @@ const cartSlice = createSlice({
     })
     .addCase(removeFromCart.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart=action.payload;
+      state.cart=action.payload.cart;
       saveCartToStorage(action.payload)
     })
     .addCase(removeFromCart.rejected, (state, action) => {
