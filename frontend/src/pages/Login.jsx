@@ -17,25 +17,41 @@ const Login = () => {
 
   // Get redirect parameter and check if it's checkout or something
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
-  const isCheckoutRedirect = redirect === "/checkout";
-  
+  const isCheckoutRedirect = redirect.startsWith("/checkout");
+
   console.log("Location Search:", location.search); // Debugging
   console.log("Redirect URL:", redirect); // Debugging
   console.log("Is Checkout Redirect:", isCheckoutRedirect); // Debugging;
+  console.log("User State:", user); // Debugging
 
+  // Redirect logged-in users away from the login page
   useEffect(() => {
-    console.log("User:", user);
-    console.log("Redirect URL:", redirect);
-
     if (user) {
-      if (cart?.products?.length > 0 && guestId) {
+      if (redirect === "/login") {
+        navigate("/"); // Prevent redirecting back to login
+      } else {
+        navigate(redirect); // Redirect to the intended page
+      }
+    }
+  }, [user, navigate, redirect]);
+
+  // Handle login and redirect
+  useEffect(() => {
+    if (user) {
+      if (cart?.products.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
-          console.log("Navigating to:", redirect); // Debugging
-          navigate(redirect); // Navigate to the redirect URL
+          if (redirect === "/checkout") {
+            window.location.href = redirect; // Force a page reload for checkout
+          } else {
+            navigate(redirect); // Navigate without reload
+          }
         });
       } else {
-        console.log("Navigating to:", redirect); // Debugging
-        navigate(redirect); // Navigate to the redirect URL
+        if (redirect === "/checkout") {
+          window.location.href = redirect; // Force a page reload for checkout
+        } else {
+          navigate(redirect); // Navigate without reload
+        }
       }
     }
   }, [user, guestId, cart, navigate, redirect, dispatch]);
@@ -45,6 +61,11 @@ const Login = () => {
     console.log("Login Attempt:", { email, password }); // Debugging
     dispatch(loginUser({ email, password }));
   };
+
+  // Prevent rendering the login form if the user is already logged in
+  if (user) {
+    return null; // Or a loading spinner if needed
+  }
 
   return (
     <div className="flex">
