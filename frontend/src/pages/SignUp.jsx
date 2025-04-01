@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import register from "../assets/register.webp";
 import { registerUser } from "../redux/slice/auth.slice.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,6 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate()
   const location = useLocation()
   const {user, guestId} = useSelector((state)=>state.auth)
   const {cart} = useSelector((state)=>state.cart)
@@ -22,13 +21,13 @@ const SignUp = () => {
     if(user){
       if(cart?.products.length > 0 && guestId){
         dispatch(mergeCart({guestId, user})).then(()=>{
-          navigate((isCheckoutRedirect? "/checkout" :"/"))
+          isCheckoutRedirect? window.location.href = redirect:"/";
         })
       }else{
-        navigate((isCheckoutRedirect ? "/checkout" :"/"))
+        isCheckoutRedirect? window.location.href = redirect:"/";
       }
     }
-  }, [user, guestId, cart, navigate, location, isCheckoutRedirect, dispatch])
+  }, [user, guestId,  cart, location, isCheckoutRedirect, redirect, dispatch])
 
   const handleSubmit = (e) => {
     e.preventDefault();
