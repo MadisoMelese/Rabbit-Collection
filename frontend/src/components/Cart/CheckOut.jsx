@@ -1,32 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PaypalButton from "./PaypalButton";
+import { useDispatch, useSelector } from 'react-redux';
+import { createCheckout } from "../../../../backend/controllers/checkout.controller";
+import axios from "axios";
 
-const cart = {
-  products: [
-    {
-      name: "Stylish Jacket",
-      size: "M",
-      color: "Black",
-      price: 100,
-      image: "https://picsum.photos/500/500?random=9",
-    },
+// const cart = {
+//   products: [
+//     {
+//       name: "Stylish Jacket",
+//       size: "M",
+//       color: "Black",
+//       price: 100,
+//       image: "https://picsum.photos/500/500?random=9",
+//     },
 
-    {
-      name: "causual T-shirt",
-      size: "M",
-      color: "White",
-      price: 140,
-      image: "https://picsum.photos/500/500?random=10",
-    },
-  ],
+//     {
+//       name: "causual T-shirt",
+//       size: "M",
+//       color: "White",
+//       price: 140,
+//       image: "https://picsum.photos/500/500?random=10",
+//     },
+//   ],
 
-  totalPrice: 240,
-  totalItems: 2,
-};
+//   totalPrice: 240,
+//   totalItems: 2,
+// };
 
 const CheckOut = () => {
+  const url = `${import.meta.env.VITE_BACKEND_URL}`
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const {cart, error, loading} = useSelector((state)=>state.cart)
+  const {user} = useSelector((state)=>state.auth)
+  const [checkoutId, setCheckoutId] = useState(null);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -36,18 +44,35 @@ const CheckOut = () => {
     country: "",
     phone: "",
   });
-  const [checkoutId, setCheckoutId] = useState(null);
+  // check the cart is empty or not!
+  useEffect(()=>{
+    if (!cart|| !cart.products || cart.product.length ===0) {
+      navigate("/")
+    }
+  }, [cart, navigate])
+
 
   const handlecreateCheckout = (e) => {
     e.preventDefault();
-    console.log("checkout created");
-    console.log(shippingAddress);
-    console.log(checkoutId);
-    setCheckoutId(1345678);
+    if(cart?.products?.length >0){
+      const res = dispatch(createCheckout({
+        checkoutItems:cart.products,
+        shippingAddress,
+        paymentMethod:"paypal",
+        totalPrice:cart.totalPrice,
+      }));
+      if (res.payload && res.payload._id) {
+        setCheckoutId(res.payload._id)
+      }
+    }
   };
 
-  const handleSuccessPayment = (details) => {
-    console.log("payment success", details);
+  const handleSuccessPayment = async (details) => {
+    try {
+      const response = await axios.put(`${url}/api/checkout/${res.payload._id}/pay`)
+    } catch (error) {
+      
+    }
     navigate("/order/success");
   };
 
