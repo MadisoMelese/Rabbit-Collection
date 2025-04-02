@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PaypalButton from "./PaypalButton";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { createCheckout } from "../../../../backend/controllers/checkout.controller";
 import axios from "axios";
 
@@ -29,11 +29,11 @@ import axios from "axios";
 // };
 
 const CheckOut = () => {
-  const url = `${import.meta.env.VITE_BACKEND_URL}`
+  const url = `${import.meta.env.VITE_BACKEND_URL}`;
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const {cart, error, loading} = useSelector((state)=>state.cart)
-  const {user} = useSelector((state)=>state.auth)
+  const dispatch = useDispatch();
+  const { cart, error, loading } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
   const [checkoutId, setCheckoutId] = useState(null);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
@@ -45,36 +45,80 @@ const CheckOut = () => {
     phone: "",
   });
   // check the cart is empty or not!
-  useEffect(()=>{
-    if (!cart|| !cart.products || cart.product.length ===0) {
-      navigate("/")
+  useEffect(() => {
+    if (!cart || !cart.products || cart.product.length === 0) {
+      navigate("/");
     }
-  }, [cart, navigate])
+  }, [cart, navigate]);
 
-
-  const handlecreateCheckout = (e) => {
+  const handlecreateCheckout = async (e) => {
     e.preventDefault();
-    if(cart?.products?.length >0){
-      const res = dispatch(createCheckout({
-        checkoutItems:cart.products,
-        shippingAddress,
-        paymentMethod:"paypal",
-        totalPrice:cart.totalPrice,
-      }));
+    if (cart?.products?.length > 0) {
+      const res = await dispatch(
+        createCheckout({
+          checkoutItems: cart.products,
+          shippingAddress,
+          paymentMethod: "paypal",
+          totalPrice: cart.totalPrice,
+        })
+      );
       if (res.payload && res.payload._id) {
-        setCheckoutId(res.payload._id)
+        setCheckoutId(res.payload._id);
       }
     }
   };
 
   const handleSuccessPayment = async (details) => {
     try {
-      const response = await axios.put(`${url}/api/checkout/${res.payload._id}/pay`)
+      await axios.put(
+        `${url}/api/checkout/${checkoutId}/pay`,
+        {
+          paymentStatus: "paid",
+          paymentDetails: details,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      await handleFinalizedCheckout(checkoutId);
     } catch (error) {
-      
+      console.error(error);
     }
-    navigate("/order/success");
   };
+
+  const handleFinalizedCheckout = async (checkoutId) => {
+    try {
+      await axios.post(
+        `${url}/api/checkout/${checkoutId}/finalize`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      navigate("/order/success");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error: ${error}</p>;
+  }
+  if (cart?.products?.length === 0) {
+    return (
+      <>
+        <p>Your cart is empty!</p>
+        <Link to={"/collection/all"}>Go back to shop</Link>
+      </>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
@@ -91,7 +135,7 @@ const CheckOut = () => {
             <input
               type="email"
               disabled
-              value="user@example.com"
+              value={user ? user.email : ""}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -228,7 +272,7 @@ const CheckOut = () => {
               <div>
                 <h3 className="text-lg mb-4">Pay with Paypal</h3>
                 <PaypalButton
-                  amount={100}
+                  amount={cart?.totalPrice}
                   onSuccess={handleSuccessPayment}
                   onError={(err) => alert("payment failed")}
                 />
@@ -242,7 +286,7 @@ const CheckOut = () => {
       <div className="bg-gray-50 p-6 raunded-lg">
         <h3 className="text-lg mb-4">Order Summary</h3>
         <div className="border-t py-4 mb-4">
-          {cart.products.map((product, index) => (
+          {cart?.products?.map((product, index) => (
             <div
               key={index}
               className="flex items-start justify-between py-2 border-b"
@@ -252,31 +296,32 @@ const CheckOut = () => {
                   src={product.image}
                   alt={product.name}
                   className="w-20 h-24 object-cover mr-4"
-                /> 
+                />
                 <div>
                   <h3 className="text-md">{product.name}</h3>
                   <p className="text-gray-500">Size: {product.size}</p>
                   <p className="text-gray-500">Color: {product.color}</p>
                 </div>
               </div>
-              <p className="text-xl">Price: ${product?.price?.toLocaleString()}</p>
+              <p className="text-xl">
+                Price: ${product?.price?.toLocaleString()}
+              </p>
             </div>
           ))}
         </div>
 
-          <div className="flex justify-between items-center text-lg mb-4">
-            <p>Subtotal</p>
-            <p>${cart.totalPrice?.toLocaleString()}</p>
-          </div>
-          <div className="flex justify-between items-center text-lg mb-4">
-            <p>Shipping</p>
-            <p>Free</p>
-          </div>
-          <div className="flex justify-between items-center text-center text-lg mt-4 border-t">
-            <p className="mt-4">Total</p>
-            <p>${cart.totalPrice?.toLocaleString()}</p>
-          </div>
-
+        <div className="flex justify-between items-center text-lg mb-4">
+          <p>Subtotal</p>
+          <p>${cart?.totalPrice.toLocaleString()}</p>
+        </div>
+        <div className="flex justify-between items-center text-lg mb-4">
+          <p>Shipping</p>
+          <p>Free</p>
+        </div>
+        <div className="flex justify-between items-center text-center text-lg mt-4 border-t">
+          <p className="mt-4">Total</p>
+          <p>${cart?.totalPrice.toLocaleString()}</p>
+        </div>
       </div>
     </div>
   );
