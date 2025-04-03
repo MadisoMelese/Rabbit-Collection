@@ -46,7 +46,7 @@ const CheckOut = () => {
   });
   // check the cart is empty or not!
   useEffect(() => {
-    if (!cart || !cart.products || cart.product.length === 0) {
+    if (!cart || !cart.products || cart?.product?.length === 0) {
       navigate("/");
     }
   }, [cart, navigate]);
@@ -312,7 +312,7 @@ const CheckOut = () => {
 
         <div className="flex justify-between items-center text-lg mb-4">
           <p>Subtotal</p>
-          <p>${cart?.totalPrice.toLocaleString()}</p>
+          <p>${cart?.totalPrice?.toLocaleString()}</p>
         </div>
         <div className="flex justify-between items-center text-lg mb-4">
           <p>Shipping</p>
@@ -320,7 +320,7 @@ const CheckOut = () => {
         </div>
         <div className="flex justify-between items-center text-center text-lg mt-4 border-t">
           <p className="mt-4">Total</p>
-          <p>${cart?.totalPrice.toLocaleString()}</p>
+          <p>${cart?.totalPrice?.toLocaleString()}</p>
         </div>
       </div>
     </div>
