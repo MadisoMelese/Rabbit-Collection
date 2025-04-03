@@ -35,6 +35,7 @@ const App = () => {
             <Route path="collection/:collection" element={<CollectionPage />} />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="login/checkout" element={<CheckOut />} />
+            <Route path="register/checkout" element={<CheckOut />} />
             <Route path="order/success" element={<OrderConfrimation />} />
             <Route path="order/:id" element={<OrderDetailpage />} />
             <Route path="my-orders" element={<MyOrderPage />} />

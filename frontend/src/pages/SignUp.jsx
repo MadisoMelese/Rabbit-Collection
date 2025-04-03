@@ -8,32 +8,45 @@ import { mergeCart } from "../redux/slice/cart.Slice.js";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
   const [name, setName] = useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation()
-  const {user, guestId} = useSelector((state)=>state.auth)
-  const {cart} = useSelector((state)=>state.cart)
+  const location = useLocation();
 
-  const redirect = new URLSearchParams(location.search).get("redirect") || "/"
-  const isCheckoutRedirect = redirect.includes("checkout")
+  const { user, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
 
-  useEffect(()=>{
-    if(user){
-      if(cart?.products.length > 0 && guestId){
-        dispatch(mergeCart({guestId, user})).then(()=>{
-          isCheckoutRedirect? navigate(redirect):"/";
-        })
-      }else{
-        isCheckoutRedirect? window.location.href = redirect:"/";
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+  const isCheckoutRedirect = redirect.includes("checkout");
+
+  console.log("Location Search:", location.search); // Debugging
+  console.log("Redirect URL:", redirect); // Debugging
+  console.log("Is Checkout Redirect:", isCheckoutRedirect); // Debugging
+
+  useEffect(() => {
+    if (user) {
+      if (cart?.products?.length > 0 && guestId) {
+        dispatch(mergeCart({ guestId, user })).then(() => {
+          if (redirect === "/checkout") {
+            navigate(redirect); // Navigate without reload
+          } else {
+            navigate(redirect); // Navigate without reload
+          }
+        });
+      } else {
+        if (redirect === "/checkout") {
+          window.location.href = redirect; // Force a page reload for checkout
+        } else {
+          navigate(redirect); // Navigate without reload
+        }
       }
     }
-  }, [user, guestId,  cart, navigate, location, isCheckoutRedirect, redirect, dispatch])
+  }, [user, guestId, cart, navigate, redirect, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("user info: ", { name, email, password });
-    dispatch(registerUser({name, email, password }));
+    console.log("User Info: ", { name, email, password });
+    dispatch(registerUser({ name, email, password }));
   };
 
   return (
@@ -48,16 +61,16 @@ const SignUp = () => {
           </div>
           <h2 className="text-2xl font-bold text-center mb-6">Hey there! 👋</h2>
           <p className="text-center mb-6 ">
-            Enter all neccessarry info to create new account.
+            Enter all necessary info to create a new account.
           </p>
           <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">Fullname</label>
             <input
-              type="fullname"
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your Fullname"
-              className="w-full p-2 border border-gray-500   rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 "
+              className="w-full p-2 border border-gray-500 rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500"
               autoFocus
             />
           </div>
@@ -68,8 +81,8 @@ const SignUp = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email Address"
-              className="w-full p-2 border border-gray-500  rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 "
+              placeholder="Enter your email address"
+              className="w-full p-2 border border-gray-500 rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500"
             />
           </div>
 
@@ -80,18 +93,21 @@ const SignUp = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full p-2 border border-gray-500  rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500"
+              className="w-full p-2 border border-gray-500 rounded invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500"
             />
           </div>
           <button
             type="submit"
             className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition capitalize"
           >
-            sign In
+            Sign Up
           </button>
           <p className="mt-6 text-center text-sm">
-            Already you have an account?{" "}
-            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-blue-500 hover:underline">
+            Already have an account?{" "}
+            <Link
+              to={`/login?redirect=${encodeURIComponent(redirect)}`}
+              className="text-blue-500 hover:underline"
+            >
               Log in
             </Link>
           </p>
