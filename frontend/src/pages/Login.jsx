@@ -41,7 +41,7 @@ const Login = () => {
       if (cart?.products.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
           if (redirect === "/checkout") {
-            window.location.href = redirect; // Force a page reload for checkout
+            navigate(redirect); // Navigate without reload
           } else {
             navigate(redirect); // Navigate without reload
           }
