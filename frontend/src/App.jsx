@@ -21,7 +21,9 @@ import OrderManagement from "./components/Admin/OrderManagement";
 import { Provider } from "react-redux";
 import store from "./redux/store.redux.js";
 
+
 const App = () => {
+
   return (
     <Provider store={store}>
       <BrowserRouter>

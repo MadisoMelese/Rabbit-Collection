@@ -44,6 +44,28 @@ export const registerUser = createAsyncThunk("auth/registerUser", async (userDat
   }
 });
 
+// Create a validateToken async thunk to validate the token and restore the user session when the app initializes:
+export const validateToken = createAsyncThunk(
+  "auth/validateToken",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("UserToken");
+      if (!token) throw new Error("No token found");
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/validate`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data.user;
+    } catch (error) {
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("UserToken");
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // slice for auth
 
@@ -71,24 +93,24 @@ const authSlice = createSlice({
       state.error = null
     })
     .addCase(loginUser.fulfilled, (state, action) => {
-      state.loading = false,
-      state.user = action.payload
+      state.loading = false;
+      state.userInfo = action.payload; // Update userInfo
     })
     .addCase(loginUser.rejected, (state, action) => {
-      state.loading = true,
-      state.error = action.payload.message
+      state.loading = false; // Fix this
+      state.error = action.payload.message;
     })
     .addCase(registerUser.pending, (state) => {
       state.loading = true,
       state.error = null
     })
     .addCase(registerUser.fulfilled, (state, action) => {
-      state.loading = false,
-      state.user = action.payload
+      state.loading = false;
+      state.userInfo = action.payload; // Update userInfo
     })
     .addCase(registerUser.rejected, (state, action) => {
-      state.loading = true,
-      state.error = action.payload.message
+      state.loading = false; // Fix this
+      state.error = action.payload.message;
     })
   }
 })
