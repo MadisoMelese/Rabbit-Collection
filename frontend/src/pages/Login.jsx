@@ -103,7 +103,7 @@ const Login = () => {
             />
           </div>
           <button className="w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition">
-            Sign In
+            Log In
           </button>
           <p className="mt-6 text-center text-sm">
             Don&apos;t have an account?{" "}
