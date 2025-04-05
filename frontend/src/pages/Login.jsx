@@ -48,7 +48,7 @@ const Login = () => {
         });
       } else {
         if (redirect === "/checkout") {
-          window.location.href = redirect; // Force a page reload for checkout
+          navigate(redirect); // Navigate without reload
         } else {
           navigate(redirect); // Navigate without reload
         }
