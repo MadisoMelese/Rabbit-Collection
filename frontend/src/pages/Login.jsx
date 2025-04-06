@@ -38,7 +38,7 @@ const Login = () => {
   // Handle login and redirect
   useEffect(() => {
     if (user) {
-      if (cart?.products.length > 0 && guestId) {
+      if (cart?.products?.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
           if (redirect === "/checkout") {
             navigate(redirect); // Navigate without reload

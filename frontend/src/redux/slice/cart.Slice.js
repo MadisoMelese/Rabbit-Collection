@@ -111,7 +111,7 @@ const cartSlice = createSlice({
     .addCase(fetchCart.fulfilled, (state, action) => {
       state.loading = false;
       state.cart=action.payload;
-      saveCartToStorage(action.payload)
+      saveCartToStorage(action.payload || { products: [], totalPrice: 0 });
     })
     .addCase(fetchCart.rejected, (state, action) => {
       state.loading = false;
