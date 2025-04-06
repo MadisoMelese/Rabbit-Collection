@@ -9,89 +9,107 @@ import CartDrawer from "../Layout/CartDrawer";
 import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useSelector } from "react-redux";
+
 const NavBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navDrawOpen, setNavDrawOpen] = useState(false);
-  const {cart} = useSelector((state)=>state.cart)
-  const cartItems = cart?.products?.reduce((total, product)=>total+product.quantity, 0) || 0
+  const { cart } = useSelector((state) => state.cart);
+  const cartItems = cart?.products?.reduce(
+    (total, product) => total + product.quantity,
+    0
+  ) || 0;
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+
   const toggleNavDrawer = () => {
     setNavDrawOpen(!navDrawOpen);
   };
+
+  const navLinks = [
+    { to: "collection/all?gender=Men", label: "Men" },
+    { to: "collection/all?gender=Women", label: "Women" },
+    { to: "collection/all?category=Top Wear", label: "Top Wear" },
+    { to: "collection/all?category=Bottom Wear", label: "Bottom Wear" },
+  ];
+
   return (
     <>
       <nav className="container mx-auto flex items-center justify-between py-4 px-6">
-        {/* Left- Logo */}
+        {/* Left - Logo */}
         <div>
           <Link to="/" className="text-2xl font-medium">
             Madisha Shop
           </Link>
         </div>
 
-        {/* center -Naviagtion Links*/}
+        {/* Center - Navigation Links */}
         <div className="hidden md:flex space-x-6">
-          <Link
-            to={"collection/all?gender=Men"}
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Men
-          </Link>
-          <Link
-            to={"collection/all?gender=Women"}
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Women
-          </Link>
-          <Link
-            to={"collection/all?category=Top Wear"}
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Top Wear
-          </Link>
-          <Link
-            to={"collection/all?category=Bottom Wear"}
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            bottom wear
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="text-gray-700 hover:text-black text-sm font-medium uppercase"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
-        {/* Right-Naviagtion Links */}
-
+        {/* Right - Navigation Links */}
         <div className="flex items-center space-x-4">
-          {/* admin link */}
-          <Link 
-          to="/admin"
-          className="block bg-black px-2 rounded text-sm text-white">
-          Admin
-          </Link>
-          <Link className="hover:text-black" to={"/profile"}>
-            <HiOutlineUser className="size-6 text-gray-700" />
+          {/* Admin Link */}
+          <Link
+            to="/admin"
+            className="block bg-black px-2 rounded text-sm text-white"
+          >
+            Admin
           </Link>
 
-          <button onClick={toggleDrawer} className="relative hover:text-black">
-            <HiOutlineShoppingBag className="size-6 text-gray-700" />
-            <span className="absolute -top-1 bg-[#ea2e0e] text-white text-xs rounded-full px-1 py-0.5">
-              {cartItems}
-            </span>
+          {/* Profile Link */}
+          <Link className="hover:text-black" to={"/profile"}>
+            <HiOutlineUser className="text-2xl text-gray-700" />
+          </Link>
+
+          {/* Cart Icon */}
+          <button
+            onClick={toggleDrawer}
+            className="relative hover:text-black"
+            aria-label="Open Cart"
+          >
+            <HiOutlineShoppingBag className="text-2xl text-gray-700" />
+            {cartItems > 0 && (
+              <span className="absolute -top-1 bg-[#ea2e0e] text-white text-xs rounded-full px-1 py-0.5">
+                {cartItems}
+              </span>
+            )}
           </button>
 
           {/* Search Icon */}
           <SearchBar />
 
-          <button onClick={toggleNavDrawer} className="md:hidden">
-            <HiBars3BottomRight className="size-6 text-gray-700" />
+          {/* Mobile Navigation Icon */}
+          <button
+            onClick={toggleNavDrawer}
+            className="md:hidden"
+            aria-label="Open Navigation"
+          >
+            <HiBars3BottomRight className="text-2xl text-gray-700" />
           </button>
         </div>
       </nav>
 
-      {/* crat drawer */}
+      {/* Cart Drawer */}
       <CartDrawer toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
 
-      {/* mobile Navigation bar  */}
+      {/* Mobile Navigation Drawer */}
+      {navDrawOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={toggleNavDrawer}
+        ></div>
+      )}
       <div
         className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${
           navDrawOpen ? "translate-x-0" : "-translate-x-full"
@@ -101,41 +119,23 @@ const NavBar = () => {
           <button>
             <IoMdClose
               onClick={toggleNavDrawer}
-              className="size-6 text-gray-600"
+              className="text-2xl text-gray-600"
             />
           </button>
         </div>
         <div className="p-4">
           <h2 className="text-xl font-semibold mb-4">Menu</h2>
           <nav className="space-y-4">
-            <Link
-              to={"collection/all?gender=Men"}
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Men
-            </Link>
-            <Link
-              to={"collection/all?gender=Women"}
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Women
-            </Link>
-            <Link
-              to={"collection/all?category=Top Wear"}
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Top Wear
-            </Link>
-            <Link
-              to={"collection/all?category=Bottom Wear"}
-              onClick={toggleNavDrawer}
-              className="block text-gray-600 hover:text-black"
-            >
-              Bottom Wear
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={toggleNavDrawer}
+                className="block text-gray-600 hover:text-black"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>
