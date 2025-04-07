@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../assets/login.webp";
 import { loginUser } from "../redux/slice/auth.slice.js";
 import { useDispatch, useSelector } from "react-redux";
-import { mergeCart } from "../redux/slice/cart.Slice.js";
+import { fetchCart, mergeCart } from "../redux/slice/cart.Slice.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -36,22 +36,37 @@ const Login = () => {
   }, [user, navigate, redirect]);
 
   // Handle login and redirect
+  // useEffect(() => {
+  //   if (user) {
+  //     if (cart?.products?.length > 0 && guestId) {
+  //       dispatch(mergeCart({ guestId, user })).then(() => {
+  //         if (redirect === "/checkout") {
+  //           navigate(redirect); // Navigate without reload
+  //         } else {
+  //           navigate(redirect); // Navigate without reload
+  //         }
+  //       });
+  //     } else {
+  //       if (redirect === "/checkout") {
+  //         navigate(redirect); // Navigate without reload
+  //       } else {
+  //         navigate(redirect); // Navigate without reload
+  //       }
+  //     }
+  //   }
+  // }, [user, guestId, cart, navigate, redirect, dispatch]);
+
+  // updated useEffect to handle login and redirect
   useEffect(() => {
     if (user) {
       if (cart?.products?.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
-          if (redirect === "/checkout") {
-            navigate(redirect); // Navigate without reload
-          } else {
-            navigate(redirect); // Navigate without reload
-          }
+          dispatch(fetchCart({ userId: user._id, guestId: null })); // Fetch the updated cart
+          navigate(redirect);
         });
       } else {
-        if (redirect === "/checkout") {
-          navigate(redirect); // Navigate without reload
-        } else {
-          navigate(redirect); // Navigate without reload
-        }
+        dispatch(fetchCart({ userId: user._id, guestId: null })); // Fetch the user's cart directly
+        navigate(redirect);
       }
     }
   }, [user, guestId, cart, navigate, redirect, dispatch]);

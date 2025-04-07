@@ -5,7 +5,13 @@ import axios from "axios";
 // helper func to load cart form local storage
 const loadCartFromStorage = () => {
   const storedCart = localStorage.getItem("cart");
-  return storedCart ? JSON.parse(storedCart) : { products: [] };  
+  try {
+    const parsedCart = storedCart ? JSON.parse(storedCart) : { products: [] };
+    return parsedCart.newCart || { products: [], totalPrice: 0 }; // Use `newCart` if available
+  } catch (error) {
+    console.error("Failed to parse cart from local storage:", error);
+    return { products: [], totalPrice: 0 }; // Fallback to an empty cart
+  }
 };
 
 // helper func to save cart to local storage
@@ -75,10 +81,11 @@ export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({pr
 // merge cart for user
 export const mergeCart = createAsyncThunk("cart/mergeCart", async ({userId, guestId}, {rejectWithValue}) => {
   try {
+    const token = localStorage.getItem("userToken");
     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/cart/merge`, {userId, guestId},
       {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -110,8 +117,8 @@ const cartSlice = createSlice({
     })
     .addCase(fetchCart.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart=action.payload;
-      saveCartToStorage(action.payload || { products: [], totalPrice: 0 });
+      state.cart = action.payload?.newCart || { products: [], totalPrice: 0 };
+      saveCartToStorage(state.cart);
     })
     .addCase(fetchCart.rejected, (state, action) => {
       state.loading = false;
@@ -150,9 +157,9 @@ const cartSlice = createSlice({
       state.loading = true;
       state.error=null;
     })
-    .addCase(removeFromCart.fulfilled, (state, action) => {
+    .addCase (removeFromCart.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart=action.payload.cart;
+      state.cart=action.payload;
       saveCartToStorage(action.payload)
     })
     .addCase(removeFromCart.rejected, (state, action) => {
@@ -166,8 +173,8 @@ const cartSlice = createSlice({
     })
     .addCase(mergeCart.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart=action.payload;
-      saveCartToStorage(action.payload)
+      state.cart = action.payload?.newCart || state.cart;
+      saveCartToStorage(state.cart); 
     })
     .addCase(mergeCart.rejected, (state, action) => {
       state.loading = false;
