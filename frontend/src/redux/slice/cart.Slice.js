@@ -152,7 +152,7 @@ const cartSlice = createSlice({
       state.loading = false;
       state.error=action.payload?.message || "Failed to update quantity";
     })
-    
+  
     .addCase(removeFromCart.pending, (state) => {
       state.loading = true;
       state.error=null;
@@ -185,5 +185,4 @@ const cartSlice = createSlice({
 });
 
 export const { clearCart } = cartSlice.actions;
-
 export default cartSlice.reducer;
