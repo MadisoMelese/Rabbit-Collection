@@ -78,7 +78,7 @@ export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({pr
   }
 })
 
-// merge cart for user
+// merge cart items for a user and guest
 export const mergeCart = createAsyncThunk("cart/mergeCart", async ({userId, guestId}, {rejectWithValue}) => {
   try {
     const token = localStorage.getItem("userToken");
