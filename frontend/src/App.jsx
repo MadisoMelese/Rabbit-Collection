@@ -43,7 +43,7 @@ const App = () => {
             <Route path="my-orders" element={<MyOrderPage />} />
           </Route>
 
-          {/* Admin Layout  */}
+          {/* Admin Layout pages */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHomePage />} />
             <Route path="users" element={<UserManagement />} />
