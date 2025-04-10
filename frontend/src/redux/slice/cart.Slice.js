@@ -53,15 +53,33 @@ export const addToCart = createAsyncThunk("cart/addToCart", async ({userId, gues
 })
 
 // update quantity of an item in the cart
-export const updateCartItemQuantity = createAsyncThunk("cart/updateCartItemQuantity", async ({userId, guestId, productId, quantity, color, size}, rejectWithValue) => {
-  try {
-    const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {userId, guestId, productId, quantity, size, color});
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return rejectWithValue(error.response.data);
+export const updateCartItemQuantity = createAsyncThunk(
+  "cart/updateCartItemQuantity",
+  async ({ userId, guestId, productId, quantity, color, size }, { rejectWithValue }) => {
+    try {
+      console.log("Updating cart item with:", { userId, guestId, productId, quantity, color, size });
+      // Validate input parameters
+      if (!productId || !quantity || quantity <= 0) {
+        return rejectWithValue("Invalid product ID or quantity");
+      }
+
+      const token = `${localStorage.getItem("UserToken")}`; // Get token from local storage
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+        { productId, quantity, size, color, guestId, userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Update Cart Item Quantity Error:", error); // Log the error for debugging
+      return rejectWithValue(error.response?.data || "Failed to update cart item quantity");
+    }
   }
-})
+);
 
 // remove an item from the cart
 export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({productId, guestId, userId, size, color}, {rejectWithValue}) => {
@@ -145,8 +163,8 @@ const cartSlice = createSlice({
     })
     .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart=action.payload;
-      saveCartToStorage(action.payload)
+      state.cart = action.payload || state.cart; // Use existing cart if payload is missing
+      saveCartToStorage(state.cart); // Save the updated cart to local storage
     })
     .addCase(updateCartItemQuantity.rejected, (state, action) => {
       state.loading = false;

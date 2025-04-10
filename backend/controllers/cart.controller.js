@@ -2,6 +2,7 @@ import { Cart } from "../models/Cart.js";
 import Product  from "../models/product.js";
 
 const getCart = async (userId, guestId) => {
+  console.log("Finding cart with:", { userId, guestId })
   if (userId) {
     return await Cart.findOne({user: userId})
   } else if(guestId) {
