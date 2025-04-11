@@ -16,11 +16,14 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ userId, guestId }, { rejectWithValue }) => {
     try {
-      const identifier = userId ? { userId } : { guestId };
+
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
         {
-          params: identifier
+          params: {
+            userId,
+            guestId,
+          }
         }
       );
       return response.data;

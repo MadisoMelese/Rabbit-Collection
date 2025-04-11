@@ -17,7 +17,7 @@ const Login = () => {
 
   // Get redirect parameter and check if it's checkout or something
   const redirect = new URLSearchParams(location.search).get("redirect") || "/";
-  const isCheckoutRedirect = redirect.startsWith("/checkout");
+  const isCheckoutRedirect = redirect.includes("checkout");
 
   console.log("Location Search:", location.search); // Debugging
   console.log("Redirect URL:", redirect); // Debugging
@@ -35,41 +35,26 @@ const Login = () => {
     }
   }, [user, navigate, redirect]);
 
-  // Handle login and redirect
-  // useEffect(() => {
-  //   if (user) {
-  //     if (cart?.products?.length > 0 && guestId) {
-  //       dispatch(mergeCart({ guestId, user })).then(() => {
-  //         if (redirect === "/checkout") {
-  //           navigate(redirect); // Navigate without reload
-  //         } else {
-  //           navigate(redirect); // Navigate without reload
-  //         }
-  //       });
-  //     } else {
-  //       if (redirect === "/checkout") {
-  //         navigate(redirect); // Navigate without reload
-  //       } else {
-  //         navigate(redirect); // Navigate without reload
-  //       }
-  //     }
-  //   }
-  // }, [user, guestId, cart, navigate, redirect, dispatch]);
-
-  // updated useEffect to handle login and redirect
-  useEffect(() => {
+  
+useEffect(() => {
     if (user) {
       if (cart?.products?.length > 0 && guestId) {
         dispatch(mergeCart({ guestId, user })).then(() => {
-          dispatch(fetchCart({ userId: user._id, guestId: null })); // Fetch the updated cart
-          navigate(redirect);
+          dispatch(fetchCart({ 
+            userId: user._id, 
+            guestId: null 
+          })); // Fetch the updated cart
+          navigate(isCheckoutRedirect? "/checkout" : redirect); // Redirect to checkout or the intended page
         });
       } else {
-        dispatch(fetchCart({ userId: user._id, guestId: null })); // Fetch the user's cart directly
-        navigate(redirect);
+        dispatch(fetchCart({ 
+          userId: user._id, 
+          guestId: null 
+        })); // Fetch the user's cart directly
+        navigate(isCheckoutRedirect? "/checkout" : redirect);
       }
     }
-  }, [user, guestId, cart, navigate, redirect, dispatch]);
+  }, [user, guestId, cart, navigate, redirect, dispatch, isCheckoutRedirect]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
