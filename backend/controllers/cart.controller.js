@@ -2,14 +2,17 @@ import { Cart } from "../models/Cart.js";
 import Product  from "../models/product.js";
 
 const getCart = async (userId, guestId) => {
-  console.log("Finding cart with:", { userId, guestId })
+  if (userId && guestId) {
+    console.warn("Both userId and guestId provided. Prioritizing userId:", { userId, guestId });
+  }
+
   if (userId) {
-    return await Cart.findOne({user: userId})
-  } else if(guestId) {
-    return await Cart.findOne({guestId})
+    return await Cart.findOne({ user: userId });
+  } else if (guestId) {
+    return await Cart.findOne({ guestId });
   }
   return null;
-}
+};
 
 // add order in the cart
 const addToTheCart = async (req, res) => {
@@ -23,7 +26,6 @@ const addToTheCart = async (req, res) => {
 
     // Chech the user logged in or gust
     let cart = await getCart(userId, guestId);
-
     // if the cart exists, update it
     if (cart) {
       const productIndex = cart.products.findIndex((product)=> 
@@ -57,8 +59,8 @@ const addToTheCart = async (req, res) => {
     else{
       // create new cart for the guest or user
       const newCart = await Cart.create({
-        userId:userId?userId:undefined,
-        guestId:guestId?guestId:"guest_"+ new Date().getTime(),
+        userId:userId? userId : undefined,
+        guestId: guestId? guestId: "guest_"+ new Date().getTime(),
         products:[
           {
             productId,
@@ -72,9 +74,8 @@ const addToTheCart = async (req, res) => {
         ],
         
         totalPrice:product.price*quantity,
-
       })
-      return res.status(201).json({success:true, newCart: newCart})
+      return res.status(201).json(newCart)
     }
   } catch (error) {
     console.error("Erro in Add to cart", error)
@@ -84,40 +85,43 @@ const addToTheCart = async (req, res) => {
 
 // update order w/c added in the cart
 const updateCart = async (req, res) => {
-  const {productId, quantity, size, color, guestId, userId} = req.body;
+  const { productId, quantity, size, color, guestId, userId } = req.body;
 
   try {
     let cart = await getCart(userId, guestId);
-    if(!cart){
-      return res.status(404).json({success:false, message:"Cart not found!"})
+    if (!cart) {
+      return res.status(200).json({ success: true, cart: { products: [], totalPrice: 0 } });
     }
 
-    const productIndex = cart.products.findIndex((product)=> 
-    product.productId.toString()===productId && 
-    product.size===size &&
-    product.color===color
+    const productIndex = cart.products.findIndex(
+      (product) =>
+        product.productId.toString() === productId &&
+        product.size === size &&
+        product.color === color
     );
-    if(productIndex >-1){
-      // update quantity
-      if (quantity>0) {
-        cart.products[productIndex].quantity=quantity;
-      }else{
-        cart.products.splice(productIndex, 1) // it removes products if quantity is 0
+
+    if (productIndex > -1) {
+      if (quantity > 0) {
+        cart.products[productIndex].quantity = quantity;
+      } else {
+        cart.products.splice(productIndex, 1); // Remove product if quantity is 0
       }
 
-      // total price
-      cart.totalPrice= cart.products.reduce((acc, item)=>acc + item.price*item.quantity, 0);
+      cart.totalPrice = cart.products.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
 
       await cart.save();
-      return res.status(200).json(cart)
-    }else{
-      return res.status(404).json({message:"Product not found!"})
+      return res.status(200).json(cart);
+    } else {
+      return res.status(404).json({ success: false, message: "Product not found!" });
     }
   } catch (error) {
-    console.error("Server Error in updating cart!", error)
-    res.status(500).json({success:false, message:"Server Error in updating cart!"})
+    console.error("Server Error in updating cart!", error);
+    res.status(500).json({ success: false, message: "Server Error in updating cart!" });
   }
-}
+};
 
 // remove product from the cart
 const removeFromTheCart = async (req, res) => {

@@ -16,13 +16,11 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ userId, guestId }, { rejectWithValue }) => {
     try {
+      const identifier = userId ? { userId } : { guestId };
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
         {
-          params: {
-            userId,
-            guestId,
-          },
+          params: identifier
         }
       );
       return response.data;
@@ -77,20 +75,11 @@ export const updateCartItemQuantity = createAsyncThunk(
         color,
         size,
       });
-      // Validate input parameters
-      if (!productId || !quantity || quantity <= 0) {
-        return rejectWithValue("Invalid product ID or quantity");
-      }
-
-      const token = `${localStorage.getItem("UserToken")}`; // Get token from local storage
+      const identifier = userId ? { userId } : { guestId };
+  
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        { productId, quantity, size, color, guestId, userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        {productId, quantity, size, color, ...identifier}
       );
       return response.data;
     } catch (error) {
@@ -123,15 +112,14 @@ export const removeFromCart = createAsyncThunk(
 // merge cart items for a user and guest
 export const mergeCart = createAsyncThunk(
   "cart/mergeCart",
-  async ({ userId, guestId }, { rejectWithValue }) => {
+  async ({ user, guestId }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("userToken");
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart/merge`,
-        { userId, guestId },
+        { user, guestId },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
         }
       );
@@ -193,7 +181,7 @@ const cartSlice = createSlice({
       .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
         state.loading = false;
         state.cart = action.payload || state.cart; // Use existing cart if payload is missing
-        saveCartToStorage(state.cart); // Save the updated cart to local storage
+        saveCartToStorage(action.payload); // Save the updated cart to local storage
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
         state.loading = false;
@@ -221,8 +209,8 @@ const cartSlice = createSlice({
       })
       .addCase(mergeCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload?.newCart || state.cart;
-        saveCartToStorage(state.cart);
+        state.cart = action.payload;
+        saveCartToStorage(action.payload);
       })
       .addCase(mergeCart.rejected, (state, action) => {
         state.loading = false;
