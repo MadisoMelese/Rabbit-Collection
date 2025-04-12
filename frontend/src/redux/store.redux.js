@@ -19,6 +19,7 @@ const store = configureStore({
   adminProducts: adminProductReducer,
   adminOrders: aminOrdersReducer,
   },
+
 });
 
 export default store;

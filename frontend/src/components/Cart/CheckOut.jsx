@@ -5,29 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCheckout } from "../../../../backend/controllers/checkout.controller";
 import axios from "axios";
 
-// const cart = {
-//   products: [
-//     {
-//       name: "Stylish Jacket",
-//       size: "M",
-//       color: "Black",
-//       price: 100,
-//       image: "https://picsum.photos/500/500?random=9",
-//     },
-
-//     {
-//       name: "causual T-shirt",
-//       size: "M",
-//       color: "White",
-//       price: 140,
-//       image: "https://picsum.photos/500/500?random=10",
-//     },
-//   ],
-
-//   totalPrice: 240,
-//   totalItems: 2,
-// };
-
 const CheckOut = () => {
   const url = `${import.meta.env.VITE_BACKEND_URL}`;
   const navigate = useNavigate();
@@ -44,9 +21,10 @@ const CheckOut = () => {
     country: "",
     phone: "",
   });
+
   // check the cart is empty or not!
   useEffect(() => {
-    if (!cart || !cart.products || cart?.product?.length === 0) {
+    if (!cart || !cart.products || cart?.products?.length === 0) {
       navigate("/");
     }
   }, [cart, navigate]);
@@ -62,8 +40,12 @@ const CheckOut = () => {
           totalPrice: cart.totalPrice,
         })
       );
+  
       if (res.payload && res.payload._id) {
         setCheckoutId(res.payload._id);
+      } else {
+        console.error("Failed to create checkout session:", res.error);
+        alert("Failed to create checkout session. Please try again.");
       }
     }
   };
@@ -85,6 +67,7 @@ const CheckOut = () => {
       await handleFinalizedCheckout(checkoutId);
     } catch (error) {
       console.error(error);
+      alert("Payment failed. Please try again.");
     }
   };
 
@@ -101,7 +84,9 @@ const CheckOut = () => {
       );
       navigate("/order/success");
     } catch (error) {
+
       console.error(error);
+      alert("Failed to finalize the order. Please try again.");
     }
   };
 
@@ -111,7 +96,7 @@ const CheckOut = () => {
   if (error) {
     return <p>Error: ${error}</p>;
   }
-  if (cart?.products?.length === 0) {
+  if (!cart || !cart.products || cart?.products?.length === 0) {
     return (
       <>
         <p>Your cart is empty!</p>

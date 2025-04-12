@@ -1,44 +1,23 @@
+import { useDispatch, useSelector } from "react-redux";
 import QRCodeGenerator from "./QrCodeGenerator";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { clearCart } from "../redux/slice/cart.Slice";
 
-const checkout = {
-  _id:"1234",
-  createdAt: new Date(),
-  checkoutItems:[
-    {
-      productId:"1",
-      name:"Product 1",
-      price: 120,
-      quantity: 1,
-      image:"https://picsum.photos/500/500?random=1",
-      color: "red",
-      size: "M",
-    },
-    {
-      productId:"2",
-      name:"Product 2",
-      price: 220,
-      quantity: 2,
-      image:"https://picsum.photos/500/500?random=2",
-      color: "black",
-      size: "XXL",
-    },
-    {
-      productId:"3",
-      name:"Product 3",
-      price: 330,
-      quantity: 3,
-      image:"https://picsum.photos/500/500?random=3",
-      color: "blue",
-      size: "XL",
-    },
-  ],
-  shippingAddress:{
-    address:'123 Main St',
-    city:'San Francisco',
-    country:'USA',
-  },
-}
+
 const OrderConfrimation = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {checkout} = useSelector((state)=>(state.checkout));
+
+  useEffect(()=>{
+    if(checkout && checkout._id){
+      dispatch(clearCart())
+      localStorage.removeItem("cart")
+    }else{
+      navigate("/my-orders")
+    }
+  }, [checkout, dispatch, navigate])
   const calculateEstimatedDeliveryTime =(createdAt)=>{
     const orderDate = new Date(createdAt);
     orderDate.setDate(orderDate.getDate() + 10);
